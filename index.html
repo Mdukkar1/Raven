@@ -1,512 +1,896 @@
-<!DOCTYPE html>
-<html lang="bn">
+<!doctype html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>মাদ্রাসা হিসাব</title>
-<link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+<meta name="color-scheme" content="dark">
+<title>Raven Studio — 3D · VFX · AI</title>
 <style>
-:root{--bg:#f3f7f2;--card:#fff;--ink:#1d2b24;--mute:#66756c;--pri:#0f6b4a;--pri2:#0b4f37;--gold:#b8861f;--red:#c0392b;--line:#e1e9e2;--chip:#e6f2ec;--onpri:#fff;color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1913;--card:#17241d;--ink:#e8f0ea;--mute:#9bb0a3;--pri:#3fbf8a;--pri2:#2a8f66;--gold:#e0b04e;--red:#ef7c6e;--line:#27382f;--chip:#1f3328;--onpri:#06150e;color-scheme:dark}}
-:root[data-theme="dark"]{--bg:#0f1913;--card:#17241d;--ink:#e8f0ea;--mute:#9bb0a3;--pri:#3fbf8a;--pri2:#2a8f66;--gold:#e0b04e;--red:#ef7c6e;--line:#27382f;--chip:#1f3328;--onpri:#06150e;color-scheme:dark}
-*{box-sizing:border-box}
-html{scroll-padding-top:env(safe-area-inset-top,0px)}
-body{margin:0;background:var(--bg);color:var(--ink);font-family:"Hind Siliguri","Noto Sans Bengali","Segoe UI",sans-serif;font-size:16px;line-height:1.5}
-.wrap{max-width:900px;margin:0 auto;padding:0 14px 40px}
-header{background:linear-gradient(135deg,#0b4f37,#0f6b4a 60%,#1b8a62);color:#fff;padding:22px 14px 54px;text-align:center}
-header .ic{font-size:34px}
-#sname{display:block;width:100%;max-width:520px;margin:4px auto 0;background:transparent;border:0;border-bottom:2px dashed rgba(255,255,255,.45);color:#fff;font:700 26px "Hind Siliguri",sans-serif;text-align:center;padding:4px}
-#sname::placeholder{color:rgba(255,255,255,.7)}
-#sname:focus{outline:0;border-bottom-color:#f5d27a}
-header p{margin:6px 0 0;opacity:.85;font-size:14px}
-nav{display:flex;gap:6px;background:var(--card);border-radius:16px;padding:6px;margin:-28px 0 16px;box-shadow:0 6px 20px rgba(0,0,0,.12);position:sticky;top:calc(env(safe-area-inset-top,0px) + 6px);z-index:5}
-nav button{flex:1;border:0;background:transparent;color:var(--mute);font:600 14px inherit;font-family:inherit;padding:10px 4px;border-radius:12px;cursor:pointer}
-nav button.on{background:var(--pri);color:var(--onpri)}
-.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:14px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:14px}
-.stat small{color:var(--mute);display:block;font-size:13px}
-.stat b{font-size:22px;display:block;margin-top:2px}
-.stat.g b{color:var(--pri)}.stat.r b{color:var(--red)}.stat.y b{color:var(--gold)}
-.stat.big{grid-column:1/-1;background:linear-gradient(135deg,#0b4f37,#0f6b4a);color:#fff;border:0}
-.stat.big small{color:#d3eadf}.stat.big b{font-size:30px;color:#fff}
-h2{font-size:18px;margin:18px 0 10px}
-form.card{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
-label{font-size:13px;color:var(--mute);display:block}
-input,select,textarea{width:100%;font:inherit;font-family:inherit;color:var(--ink);background:var(--bg);border:1.5px solid var(--line);border-radius:10px;padding:10px;margin-top:3px}
-input:focus,select:focus,textarea:focus{outline:0;border-color:var(--pri)}
-.full{grid-column:1/-1}
-.btn{border:0;background:var(--pri);color:var(--onpri);font:700 16px inherit;font-family:inherit;padding:12px;border-radius:12px;cursor:pointer}
-.btn:active{transform:scale(.98)}
-.btn.alt{background:var(--chip);color:var(--pri)}
-.filters{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-.filters>*{flex:1;min-width:120px;margin:0}
-.row{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:11px 13px;margin-bottom:8px}
-.rm b{display:block}.rm small{color:var(--mute)}
-.ra{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-.amt{font-weight:700;font-size:17px}.amt.p{color:var(--pri)}.amt.d{color:var(--red)}
-.badge{font-size:12px;padding:2px 9px;border-radius:99px;font-weight:600}
-.badge.p{background:var(--chip);color:var(--pri)}.badge.d{background:rgba(192,57,43,.14);color:var(--red)}
-.mini{border:0;border-radius:9px;padding:6px 10px;font:600 13px inherit;font-family:inherit;cursor:pointer;background:var(--chip);color:var(--pri)}
-.mini.x{background:rgba(192,57,43,.12);color:var(--red)}
-.total{display:flex;gap:10px;flex-wrap:wrap;background:var(--chip);border-radius:14px;padding:12px 14px;margin:10px 0;font-weight:600}
-.total span{flex:1;min-width:130px}
-.empty{text-align:center;color:var(--mute);padding:22px}
-table{width:100%;border-collapse:collapse;font-size:15px}
-th,td{padding:9px 6px;text-align:right;border-bottom:1px solid var(--line)}
-th:first-child,td:first-child{text-align:left}
-th{color:var(--mute);font-weight:600;font-size:13px}
-tfoot td{font-weight:700;border-bottom:0}
-.scroll{overflow-x:auto}
-section{display:none}section.on{display:block;animation:in .25s}
-@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-details{margin-top:24px}summary{cursor:pointer;color:var(--mute)}
-textarea{height:110px;font-size:12px}
-.note{font-size:13px;color:var(--mute);margin-top:6px}
-nav{overflow-x:auto;scrollbar-width:none}nav::-webkit-scrollbar{display:none}
-nav button{flex:1 0 auto;padding:10px 12px;white-space:nowrap}
-a.mini{text-decoration:none;display:inline-block}
-.card.bulk{margin-top:14px;padding:12px 14px}.card.bulk summary{color:var(--pri);font-weight:600}
-.bgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:12px}
-#rc{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:20;overflow:auto;display:flex;justify-content:center;align-items:flex-start;padding:calc(env(safe-area-inset-top,0px) + 16px) 14px 30px}
-#rc[hidden]{display:none}
-.rcbox{background:#fff;color:#111;width:100%;max-width:420px;border-radius:14px;padding:20px;border:3px double #0f6b4a}
-.rch{text-align:center;border-bottom:2px solid #0f6b4a;padding-bottom:10px;margin-bottom:8px}.rch b{font-size:20px;display:block}
-.rcr{display:flex;justify-content:space-between;gap:10px;padding:7px 0;border-bottom:1px dotted #bbb}.rcr span{color:#555}.rcr.tot{font-size:18px;border-bottom:0}
-.rcs{margin-top:34px;text-align:right}.rcs span{border-top:1px solid #111;padding-top:4px;font-size:13px}
-.rcb{display:flex;gap:8px;margin-top:18px}.rcb .btn{flex:1}
-@media print{body{background:#fff;color:#000}header,nav,details,.noprint{display:none!important}body.prc .wrap{display:none!important}body.prc #rc{position:static;background:none;padding:0}.card{break-inside:avoid}}
-/* layout fixes */
-html{-webkit-text-size-adjust:100%}
-nav{position:static;flex-wrap:wrap;overflow:visible;justify-content:center;gap:5px}
-nav button{flex:1 1 22%;font-size:13.5px;font-weight:600;padding:9px 6px;white-space:nowrap}
-.btn{font-size:16px;font-weight:700}
-.mini{font-size:13px;font-weight:600;white-space:nowrap}
-input,select{min-height:44px}
-input[type=date]{-webkit-appearance:none;appearance:none}
-form.card>*,.bgrid>*{min-width:0}
-.rm{flex:1 1 190px;min-width:0}
-.ra{flex:0 1 auto;justify-content:flex-end}
-#cards>div:nth-child(1){order:-3}#cards>div:nth-child(3){order:-2}
-td,th{white-space:nowrap}
-.stat b{font-size:20px}.stat.big b{font-size:28px}
-.rcbox label{color:#555}.rcbox input,.rcbox select{background:#f3f7f2;color:#111;border-color:#cfd8d1}
-input[type=checkbox]{width:22px;min-height:22px;margin:0}
-.ra input.pm-r{width:96px}
-.rsign{display:flex;justify-content:space-between;gap:10px;margin:56px 6px 10px;color:var(--mute)}.rsign span{border-top:1px solid var(--mute);padding-top:4px;min-width:130px;text-align:center;font-size:13px}
+:root{color-scheme:dark;--bg:#181818;--tx:#d6d6d6;--mut:#8b8b8b;--or:#e87d0d;--bl:#4772b3;--lime:#d4ff1a;--ae:#9a9aff;--ok:#7bd88f;
+  box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);background:#181818}
+body{margin:0;height:100%;overflow:hidden;background:#181818;color:var(--tx);font:12px/1.35 Inter,"Segoe UI",system-ui,-apple-system,Roboto,sans-serif;-webkit-font-smoothing:antialiased}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none;padding:0}
+a{color:inherit}
+#app{height:100%;display:flex;flex-direction:column}
+
+/* ---------- Blender shell ---------- */
+#mbar{height:28px;flex:none;display:flex;align-items:center;gap:4px;padding:0 8px;background:#1d1d1d;border-bottom:1px solid #000}
+#mbar svg{width:20px;height:20px;margin-right:6px}
+#mbar .m{padding:4px 9px;border-radius:5px;color:#cfcfcf}
+#mbar .m:hover{background:#3a3a3a}
+.sp{flex:1}
+.fake{background:#2b2b2b;border-radius:5px;padding:3px 12px;color:#aaa;margin-left:6px}
+#tabs{height:30px;flex:none;display:flex;gap:2px;padding:4px 8px 0;background:#141414;overflow-x:auto;scrollbar-width:none}
+#tabs::-webkit-scrollbar{display:none}
+#tabs button{flex:none;padding:0 14px;border-radius:7px 7px 0 0;background:#262626;color:#a9a9a9;display:flex;align-items:center;gap:7px;position:relative;transition:background .2s,color .2s}
+#tabs button:hover{background:#333;color:#fff}
+#tabs button.on{background:#3a3a3a;color:#fff}
+#tabs button.on::after{content:"";position:absolute;left:8px;right:8px;top:0;height:2px;background:var(--or);border-radius:2px}
+#main{flex:1;display:flex;min-height:0;border-top:1px solid #000}
+#tool{width:34px;flex:none;background:#232323;border-right:1px solid #000;display:flex;flex-direction:column;align-items:center;padding:8px 0;gap:6px}
+#tool span{width:26px;height:26px;border-radius:6px;display:grid;place-items:center;background:#2d2d2d;color:#bbb;font-size:13px}
+#tool span.on{background:var(--bl);color:#fff}
+#vpcol{flex:1;min-width:0;display:flex;flex-direction:column}
+#vph{height:28px;flex:none;display:flex;align-items:center;gap:6px;padding:0 8px;background:#2b2b2b;border-bottom:1px solid #000;white-space:nowrap;overflow:hidden}
+#vph .pl{background:#3d3d3d;border-radius:5px;padding:3px 10px}
+#vph .m{padding:3px 8px;border-radius:5px;color:#c9c9c9}
+#vph .btn{background:#3d3d3d;border-radius:5px;padding:3px 11px;color:#fff;transition:background .2s}
+#vph .btn:hover{background:var(--bl)}
+#vp{flex:1;position:relative;overflow:hidden;background:radial-gradient(120% 90% at 50% 30%,#2f2f31 0%,#1d1d1f 60%,#141415 100%)}
+.floor{position:absolute;left:-50%;width:200%;top:52%;height:130%;transform:perspective(520px) rotateX(68deg);transform-origin:50% 0;background-image:linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);background-size:64px 64px;-webkit-mask-image:radial-gradient(closest-side at 50% 18%,#000 25%,transparent 100%);mask-image:radial-gradient(closest-side at 50% 18%,#000 25%,transparent 100%);pointer-events:none}
+.floor::before,.floor::after{content:"";position:absolute}
+.floor::before{left:0;right:0;top:0;height:2px;background:#c0392b}
+.floor::after{left:50%;top:0;bottom:0;width:2px;background:#5fae3f}
+.glow{position:absolute;left:50%;top:46%;width:70%;aspect-ratio:1;transform:translate(-50%,-50%);background:radial-gradient(closest-side,rgba(232,125,13,.18),transparent);pointer-events:none;transition:opacity .6s}
+#vp.flat .glow,#vp.flat .floor{opacity:0;transition:opacity .6s}
+#stage{position:absolute;inset:0;perspective:1400px;overflow:hidden;user-select:none;-webkit-user-select:none}
+#vp.over #stage{touch-action:none;cursor:grab}
+#vp.over #stage:active{cursor:grabbing}
+#vp.flat #stage{touch-action:pan-y}
+#cube{position:absolute;left:50%;top:50%;width:var(--S);height:var(--S);margin:calc(var(--S)/-2) 0 0 calc(var(--S)/-2);transform-style:preserve-3d}
+.face{position:absolute;left:0;top:0;width:var(--S);height:var(--S);backface-visibility:hidden;-webkit-backface-visibility:hidden}
+.face[data-f=front]{transform:translateZ(calc(var(--S)/2))}
+.face[data-f=right]{transform:rotateY(90deg) translateZ(calc(var(--S)/2))}
+.face[data-f=back]{transform:rotateY(180deg) translateZ(calc(var(--S)/2))}
+.face[data-f=left]{transform:rotateY(-90deg) translateZ(calc(var(--S)/2))}
+.face[data-f=top]{transform:rotateX(90deg) translateZ(calc(var(--S)/2))}
+.face[data-f=bottom]{transform:rotateX(-90deg) translateZ(calc(var(--S)/2))}
+.wrap{position:absolute;left:0;top:0;width:var(--S);height:var(--S);overflow:hidden;container-type:size;background:#1b1b1b;font-size:calc(var(--S)/46);box-shadow:0 0 0 1px #000}
+body.ready .wrap{transition:width .6s cubic-bezier(.2,.8,.2,1),height .6s cubic-bezier(.2,.8,.2,1),left .6s cubic-bezier(.2,.8,.2,1),top .6s cubic-bezier(.2,.8,.2,1),font-size .6s cubic-bezier(.2,.8,.2,1),filter .25s}
+#vp.over .wrap{box-shadow:0 0 0 2px var(--or),0 0 70px rgba(232,125,13,.28)}
+#vp.over .face:hover .wrap{filter:brightness(1.14)}
+.vpinfo{position:absolute;left:12px;top:10px;color:#cfcfcf;font-size:12px;line-height:1.5;text-shadow:0 1px 2px #000;pointer-events:none;transition:opacity .4s}
+.vpinfo b{color:#ffb061;font-weight:500}
+.hint{position:absolute;left:0;right:0;bottom:12px;text-align:center;color:#9a9a9a;pointer-events:none;transition:opacity .4s}
+#vp.flat .vpinfo,#vp.flat .hint,#vp.flat #giz{opacity:0;pointer-events:none}
+#giz{position:absolute;right:10px;top:8px;width:92px;height:92px;transition:opacity .4s}
+#giz g{cursor:pointer}
+#giz text{font:600 9px Inter,sans-serif;fill:#111;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+#side{width:236px;flex:none;background:#262626;border-left:1px solid #000;display:flex;flex-direction:column;min-height:0}
+.ph2{height:26px;flex:none;display:flex;align-items:center;padding:0 10px;background:#2d2d2d;border-bottom:1px solid #000;color:#e0e0e0}
+.ol{padding:6px 0}
+.ol button{display:flex;width:100%;align-items:center;gap:8px;padding:5px 12px;text-align:left;color:#cfcfcf}
+.ol button:hover{background:#333}
+.ol button.on{background:#3b5a8c;color:#fff}
+.ol .l1{padding-left:26px}
+.props{padding:10px 12px;display:flex;flex-direction:column;gap:7px;border-top:1px solid #000}
+.props h4{margin:4px 0 2px;font-weight:600;color:#e6e6e6}
+.row3{display:grid;grid-template-columns:62px 1fr;gap:6px;align-items:center}
+.row3 label{color:#999}
+.val{background:#1d1d1d;border-radius:5px;padding:4px 8px;color:#eee;font-variant-numeric:tabular-nums}
+#tl{height:46px;flex:none;display:flex;align-items:stretch;background:#232323;border-top:1px solid #000}
+.tlc{display:flex;align-items:center;gap:4px;padding:0 10px;border-right:1px solid #000}
+.tlc button{width:28px;height:28px;border-radius:6px;background:#333;display:grid;place-items:center;color:#ddd}
+.tlc button:hover{background:var(--bl)}
+.tlc #play{background:var(--or);color:#111;font-weight:700}
+.tlr{position:relative;flex:1;margin:0 14px;min-width:0}
+.ticks{position:absolute;left:0;right:0;top:6px;height:8px;background-image:repeating-linear-gradient(90deg,#666 0 1px,transparent 1px 2%);opacity:.7}
+.marks button{position:absolute;top:16px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:2px;color:#9c9c9c;font-size:10.5px;white-space:nowrap}
+.marks button i{width:8px;height:8px;background:#e2b24c;transform:rotate(45deg);display:block}
+.marks button.on{color:#fff}.marks button.on i{background:var(--or);box-shadow:0 0 0 3px rgba(232,125,13,.3)}
+.marks button:hover{color:#fff}
+#tlph{position:absolute;top:0;bottom:0;width:0;border-left:2px solid #4a90ff;pointer-events:none}
+#tlph span{position:absolute;top:-1px;left:-18px;min-width:36px;text-align:center;background:#2f6fd0;color:#fff;border-radius:4px;padding:1px 4px;font-size:10.5px;font-variant-numeric:tabular-nums}
+.tlf{display:flex;align-items:center;padding:0 12px;color:#888;border-left:1px solid #000;white-space:nowrap}
+#status{height:22px;flex:none;display:flex;align-items:center;gap:16px;padding:0 10px;background:#1d1d1d;border-top:1px solid #000;color:#8d8d8d;font-size:11px;white-space:nowrap;overflow:hidden}
+#status .sp{flex:1}
+#status b{color:#bbb;font-weight:500}
+
+/* ---------- Faces: shared ---------- */
+.fi{position:absolute;inset:0;display:flex;flex-direction:column;min-height:0;min-width:0}
+.bhd{height:2.6em;flex:none;display:flex;align-items:center;gap:1.1em;padding:0 .8em;background:#2d2d2d;border-bottom:1px solid #000;white-space:nowrap;overflow:hidden}
+.pill{background:#3d3d3d;border-radius:.5em;padding:.3em .8em;color:#eee}
+.mi{color:#bdbdbd}.dim{color:#777}
+.bbody{flex:1;display:flex;min-height:0}
+.tbar{width:2.9em;flex:none;background:#262626;border-right:1px solid #000;display:flex;flex-direction:column;align-items:center;padding:.5em 0;gap:.4em}
+.tbar span{width:2.1em;height:2.1em;display:grid;place-items:center;border-radius:.45em;background:#303030;color:#ccc}
+.tbar span.on{background:var(--bl);color:#fff}
+.ph{position:absolute;inset:0;overflow:hidden;background:radial-gradient(70% 70% at 28% 22%,var(--a),transparent 70%),radial-gradient(60% 60% at 85% 90%,color-mix(in srgb,var(--a) 45%,transparent),transparent 70%),linear-gradient(135deg,var(--b),#050505)}
+.ph::before{content:"";position:absolute;inset:-30%;background:conic-gradient(from 0deg at 50% 50%,transparent,rgba(255,255,255,.1),transparent 30%);animation:spin 9s linear infinite}
+.ph i{position:absolute;inset:0;display:grid;place-items:center;font-style:normal;font-size:5em;color:rgba(255,255,255,.22)}
+.mw{position:relative;overflow:hidden}
+.mw>img,.mw>video,.camframe>img,.camframe>video,.aeframe>img,.aeframe>video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.in{animation:pop .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes pop{from{opacity:0;transform:scale(.965)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(232,125,13,.55)}50%{box-shadow:0 0 0 .8em rgba(232,125,13,0)}}
+@keyframes blink{50%{opacity:0}}
+@keyframes fadeup{from{opacity:0;transform:translateY(.5em)}to{opacity:1;transform:none}}
+@keyframes wire{from{stroke-dashoffset:0}to{stroke-dashoffset:-60}}
+@keyframes bob{0%,100%{transform:translate(-50%,-50%)}50%{transform:translate(-50%,-53%)}}
+
+/* ---------- Front: Layout ---------- */
+.vpm{flex:1;position:relative;overflow:hidden;background:radial-gradient(90% 70% at 50% 30%,#303033,#1c1c1e)}
+.vpm::before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.05) 1px,transparent 1px);background-size:3.2em 3.2em}
+.wiresvg{position:absolute;left:50%;top:36%;height:52%;transform:translate(-50%,-50%);animation:bob 5s ease-in-out infinite;overflow:visible}
+.wiresvg .cb{fill:rgba(40,40,40,.85);stroke:var(--or);stroke-width:3;stroke-linejoin:round}
+.wiresvg .dash{fill:none;stroke:#fff;stroke-width:1.5;stroke-dasharray:6 8;opacity:.5;animation:wire 2s linear infinite}
+.hero{position:absolute;left:0;right:0;bottom:6%;text-align:center;padding:0 1em}
+.hero h1{margin:0;font-size:4.6em;line-height:.95;font-weight:800;letter-spacing:.06em;color:#fff;text-shadow:0 .1em .6em rgba(0,0,0,.6)}
+.hero h1 span{display:block;color:var(--or)}
+.hero p{margin:.9em 0 0;font-size:1.25em;color:#cfcfcf}
+.cta{margin-top:1.1em;background:var(--or);color:#161616;font-weight:700;padding:.75em 1.9em;border-radius:.6em;font-size:1.15em;animation:pulse 1.8s infinite}
+.cta:hover{background:#ff9a2e}
+.olm{width:15em;flex:none;background:#262626;border-left:1px solid #000}
+.olm div{padding:.35em .9em;color:#cfcfcf}
+.olm .h{background:#2d2d2d;border-bottom:1px solid #000;color:#eee;padding:.55em .9em}
+.olm .s{background:#3b5a8c;color:#fff}
+
+/* ---------- Right: Animation ---------- */
+.agrid{flex:1;display:grid;grid-template-columns:1fr 17em;grid-template-rows:1fr 15em;min-height:0}
+.cam{position:relative;background:#262626;display:flex;align-items:center;justify-content:center;padding:1em;container-type:size;min-height:0;border-bottom:1px solid #000}
+.camframe{position:relative;width:min(100cqw,calc(100cqh*1.7778));aspect-ratio:16/9;outline:2px solid var(--or);cursor:pointer;overflow:hidden;background:#000}
+.ov{position:absolute;z-index:2;color:#eee;font-size:.9em;text-shadow:0 1px 3px #000;pointer-events:none}
+.ov.tl{left:.8em;top:.6em}.ov.bl{left:.8em;bottom:.6em}.ov.tr{right:.8em;top:.6em}.ov.br{right:.8em;bottom:.6em;color:#ffb061}
+.olx{background:#262626;border-left:1px solid #000;border-bottom:1px solid #000;overflow:auto;min-height:0}
+.orow{display:flex;gap:.7em;align-items:center;padding:.5em .9em;cursor:pointer;color:#cfcfcf}
+.orow:hover{background:#333}.orow.on{background:#3b5a8c;color:#fff}
+.dope{grid-column:1/-1;background:#222;display:flex;flex-direction:column;min-height:0}
+.dhd{height:2.4em;flex:none;display:flex;align-items:center;gap:1em;padding:0 .8em;background:#2b2b2b;border-bottom:1px solid #000}
+.drows{--pp:.1;position:relative;flex:1;overflow:hidden;display:flex;flex-direction:column}
+.dr{display:grid;grid-template-columns:10em 1fr;flex:1;min-height:1.7em;max-height:2.6em;border-bottom:1px solid #1a1a1a;cursor:pointer;align-items:center}
+.dr:hover{background:#2a2a2a}.dr.on{background:#2c3a52}
+.dr .dn{padding:0 .8em;color:#c9c9c9;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dr.rul{flex:none;height:1.9em;cursor:default;background:#2a2a2a;min-height:0}
+.dr.rul:hover{background:#2a2a2a}
+.dt{position:relative;height:100%}
+.rul .dt{background-image:repeating-linear-gradient(90deg,#777 0 1px,transparent 1px 5%);background-size:100% 40%;background-repeat:no-repeat;background-position:bottom}
+.bar{position:absolute;top:22%;height:56%;border-radius:.25em;background:#5a6f94;opacity:.85}
+.bar::before,.bar::after{content:"";position:absolute;top:50%;width:.7em;height:.7em;background:#e2b24c;transform:translate(-50%,-50%) rotate(45deg)}
+.bar::before{left:0}.bar::after{left:100%}
+.dr.on .bar{background:var(--or);opacity:1}
+.pline{position:absolute;top:0;bottom:0;left:calc(10em + (100% - 10em) * var(--pp));border-left:2px solid #4a90ff;transition:left .6s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+
+/* ---------- Back: After Effects ---------- */
+.ae{background:#1e1e1e;color:#cfcfcf}
+.aemenu{height:2.4em;flex:none;display:flex;align-items:center;gap:1.1em;padding:0 .8em;background:#171717;border-bottom:1px solid #000;white-space:nowrap;overflow:hidden}
+.aelogo{background:#00005b;color:#a8a8ff;border:1px solid #9a9aff;border-radius:.35em;padding:.05em .4em;font-weight:700}
+.aetools{height:2.5em;flex:none;display:flex;align-items:center;gap:.5em;padding:0 .8em;background:#262626;border-bottom:1px solid #000;overflow:hidden}
+.aetools span{width:1.9em;height:1.9em;display:grid;place-items:center;border-radius:.35em;color:#bbb;flex:none}
+.aetools span.on{background:#3a3a3a;color:#fff}
+.aegrid{flex:1;display:grid;grid-template-columns:16em 1fr 17em;grid-template-rows:1fr 16em;gap:2px;background:#000;min-height:0}
+.aep{background:#232323;min-height:0;min-width:0;display:flex;flex-direction:column;overflow:hidden}
+.aeh{height:2.3em;flex:none;display:flex;align-items:center;gap:.8em;padding:0 .8em;background:#2b2b2b;color:#e6e6e6;font-weight:600;border-bottom:1px solid #111;white-space:nowrap}
+.aeh i{font-style:normal;color:#8b8b8b;font-weight:400}
+.aelist{overflow:auto;flex:1}
+.aeit{display:flex;align-items:center;gap:.7em;padding:.4em .8em;cursor:pointer}
+.aeit:hover{background:#2e2e2e}.aeit.on{background:#3a3a6e;color:#fff}
+.aeit .th{position:relative;width:3em;aspect-ratio:16/9;border-radius:.2em;overflow:hidden;flex:none}
+.aeit small{display:block;color:#8f8f8f}
+.aeview{flex:1;display:flex;align-items:center;justify-content:center;padding:1em;container-type:size;background:#161616;min-height:0}
+.aeframe{position:relative;width:min(100cqw,calc(100cqh*1.7778));aspect-ratio:16/9;outline:1px solid #4a4a4a;overflow:hidden;cursor:pointer}
+.aeframe::after{content:"";position:absolute;inset:6%;border:1px dashed rgba(255,255,255,.2);pointer-events:none}
+.aectl{height:2.3em;flex:none;display:flex;align-items:center;gap:1.2em;padding:0 .8em;background:#2b2b2b;border-top:1px solid #111;color:#bdbdbd;white-space:nowrap;overflow:hidden}
+.fxr{padding:.55em .8em;border-bottom:1px solid #1a1a1a}
+.fxr b{display:block;color:#e6e6e6;font-weight:600;margin-bottom:.3em}
+.fxr b::before{content:"fx ";color:#a8a8ff;font-style:italic;font-weight:500}
+.sl{display:grid;grid-template-columns:6.6em 1fr;gap:.6em;align-items:center;margin:.28em 0;color:#9d9d9d}
+.sl s{display:block;height:.35em;background:#111;border-radius:1em;overflow:hidden;text-decoration:none}
+.sl s i{display:block;height:100%;background:var(--ae);animation:sld var(--d,4s) ease-in-out infinite alternate;width:30%}
+@keyframes sld{from{width:12%}to{width:92%}}
+.aetl{grid-column:1/-1}
+.lay{--pp:.1;position:relative;flex:1;overflow:hidden;display:flex;flex-direction:column}
+.lr{display:grid;grid-template-columns:1.8em .9em 12em 1fr;align-items:center;flex:1;min-height:1.7em;max-height:2.5em;border-bottom:1px solid #1b1b1b;cursor:pointer}
+.lr:hover{background:#2a2a2a}.lr.on{background:#32325a}
+.lr .no{text-align:center;color:#777}
+.lr .lc{width:.7em;height:.7em;border-radius:.15em;background:var(--lc)}
+.lr .nm{padding:0 .8em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lr.rul{flex:none;height:1.9em;min-height:0;background:#2a2a2a;cursor:default;color:#999}
+.lbar{position:absolute;top:22%;height:56%;border-radius:.25em;background:color-mix(in srgb,var(--lc) 55%,#222);border:1px solid var(--lc);opacity:.85}
+.lr.on .lbar{opacity:1;background:color-mix(in srgb,var(--lc) 75%,#222)}
+.aeph{position:absolute;top:0;bottom:0;left:calc(14.6em + (100% - 14.6em) * var(--pp));border-left:2px solid #2d8ceb;transition:left .6s cubic-bezier(.2,.8,.2,1);pointer-events:none}
+.aeph::before{content:"";position:absolute;left:-.55em;top:0;border:.5em solid transparent;border-top-color:#2d8ceb}
+.tc{color:#5fa8ff;font-size:1.25em;font-variant-numeric:tabular-nums;font-weight:500}
+
+/* ---------- Left: AI studio ---------- */
+.hg{flex-direction:row;background:#0a0a0b;color:#eee}
+.hgrail{width:3.8em;flex:none;background:#0e0e0f;border-right:1px solid #1d1d20;display:flex;flex-direction:column;align-items:center;gap:.7em;padding:1em 0}
+.hgrail b{width:2.3em;height:2.3em;border-radius:50%;background:var(--lime);color:#000;display:grid;place-items:center;font-weight:800;margin-bottom:.7em}
+.hgrail span{width:2.5em;height:2.5em;border-radius:.8em;display:grid;place-items:center;color:#8a8a8f;font-size:1.1em}
+.hgrail span.on{background:#1d1d20;color:var(--lime)}
+.hgmain{flex:1;min-width:0;display:flex;flex-direction:column;padding:1em 1.2em;gap:.9em;overflow:hidden}
+.hgtop{display:flex;align-items:center;gap:1.4em;white-space:nowrap}
+.hgtop strong{font-size:1.25em;letter-spacing:.04em}
+.hgtop em{font-style:normal;color:var(--lime)}
+.hgprompt{background:#141416;border:1px solid #27272b;border-radius:1.2em;padding:1em 1.1em;display:flex;flex-direction:column;gap:.9em}
+.ptxt{min-height:2.7em;font-size:1.15em;line-height:1.4;color:#f4f4f4}
+.caret{display:inline-block;width:.14em;height:1.05em;background:var(--lime);vertical-align:-.18em;margin-left:.1em;animation:blink 1s steps(1) infinite}
+.prow{display:flex;align-items:center;gap:.6em;flex-wrap:wrap}
+.chip{background:#1f1f23;border-radius:.7em;padding:.4em .8em;color:#b9b9bf;white-space:nowrap}
+.gen{background:var(--lime);color:#000;font-weight:800;padding:.65em 1.3em;border-radius:.8em;transition:transform .15s,box-shadow .25s;white-space:nowrap}
+.gen.press{transform:scale(.93);box-shadow:0 0 0 .55em rgba(212,255,26,.25)}
+.hgf{display:flex;gap:.5em}
+.hgf button{padding:.4em 1em;border-radius:2em;background:#17171a;color:#9a9aa0}
+.hgf button.on{background:#eee;color:#000}
+.hggrid{flex:1;overflow:auto;columns:3;column-gap:.8em;min-height:0;scrollbar-width:thin}
+.tile{break-inside:avoid;margin:0 0 .8em;border-radius:.9em;overflow:hidden;position:relative;cursor:pointer;background:#111}
+.tile .mw{aspect-ratio:var(--r)}
+.tile .cap{position:absolute;left:0;right:0;bottom:0;padding:1.6em .8em .7em;background:linear-gradient(transparent,rgba(0,0,0,.88));font-size:.92em;opacity:0;transition:opacity .25s;z-index:2}
+.tile .cap small{display:block;color:var(--lime)}
+.tile:hover .cap,.tile.on .cap{opacity:1}
+.tile.on{outline:.22em solid var(--lime);outline-offset:-.22em}
+.tile .bd{position:absolute;left:.6em;top:.6em;z-index:2;background:rgba(0,0,0,.6);border-radius:2em;padding:.2em .7em;font-size:.85em}
+.tile.fresh{animation:pop .5s cubic-bezier(.2,.8,.2,1)}
+
+/* ---------- Top: About (Scripting) ---------- */
+.scgrid{flex:1;display:grid;grid-template-columns:1.25fr 1fr;min-height:0}
+.ed{background:#1d1d1d;display:flex;flex-direction:column;min-width:0;min-height:0;border-right:1px solid #000}
+.edt{display:flex;gap:.3em;padding:.5em .6em 0;background:#262626}
+.edt span{padding:.4em 1em;border-radius:.45em .45em 0 0;background:#2d2d2d;color:#999}
+.edt span.on{background:#1d1d1d;color:#eee}
+.code{margin:0;padding:.8em 0;overflow:auto;flex:1;font:1em/1.75 ui-monospace,Menlo,Consolas,monospace;counter-reset:l}
+.code div{padding:0 1em 0 3.4em;position:relative;white-space:pre}
+.code div::before{counter-increment:l;content:counter(l);position:absolute;left:0;width:2.5em;text-align:right;color:#555}
+.k{color:#e6a35c}.s{color:#98c379}.c{color:#6a737d}.n{color:#61afef}.f{color:#e5c07b}
+.con{background:#171717;display:flex;flex-direction:column;min-width:0;min-height:0}
+.cout{flex:1;overflow:auto;padding:.8em 1em;font:1em/1.7 ui-monospace,Menlo,Consolas,monospace;white-space:pre-wrap;color:#cfcfcf}
+.cout div{animation:fadeup .35s both}
+.cout .q{color:#8bb4ff}.cout .a{color:#9fe38b}
+.run{background:var(--or);color:#151515;font-weight:700;border-radius:.45em;padding:.3em 1em}
+
+/* ---------- Bottom: Contact ---------- */
+.ctbody{flex:1;display:flex;min-height:0}
+.ctside{width:3.2em;flex:none;background:#262626;border-right:1px solid #000;display:flex;flex-direction:column;align-items:center;gap:.5em;padding:.7em 0}
+.ctside span{width:2.2em;height:2.2em;display:grid;place-items:center;border-radius:.45em;color:#aaa;background:#2f2f2f}
+.ctside span.on{background:var(--bl);color:#fff}
+.ctmain{flex:1;overflow:auto;padding:1em;min-width:0}
+.pn{background:#2b2b2b;border-radius:.6em;margin-bottom:.9em;overflow:hidden}
+.pn h3{margin:0;padding:.6em .9em;background:#353535;font-size:1em;font-weight:600}
+.fld{display:grid;grid-template-columns:8em 1fr;gap:.6em;padding:.4em .9em;align-items:center;color:#aaa}
+.fld a{background:#1d1d1d;border-radius:.45em;padding:.5em .8em;color:#eee;text-decoration:none;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;transition:background .2s}
+.fld a:hover{background:var(--bl)}
+.status{display:flex;align-items:center;gap:.6em;padding:.6em .9em;color:#ddd}
+.status::before{content:"";width:.7em;height:.7em;border-radius:50%;background:var(--ok);box-shadow:0 0 .8em var(--ok)}
+.render{width:100%;background:var(--or);color:#151515;font-weight:800;font-size:1.25em;padding:.8em;border-radius:.6em;display:block}
+.render:hover{background:#ff9a2e}
+.rbar{height:.5em;background:#1d1d1d;border-radius:1em;overflow:hidden;margin-top:.7em}
+.rbar i{display:block;height:100%;width:0;background:var(--or)}
+.rmsg{margin-top:.5em;color:#aaa;min-height:1.3em}
+
+/* ---------- Narrow face layouts ---------- */
+@container (max-width:44em){
+  .olm,.hgrail,.ctside{display:none}
+  .tbar{width:2.4em}
+  .hero h1{font-size:3.6em}
+  .agrid{grid-template-columns:1fr;grid-template-rows:18em 1fr}
+  .agrid .dope{display:none}
+  .agrid .olx{grid-row:2;border-left:0}
+  .aegrid{grid-template-columns:1fr;grid-template-rows:1fr 14em}
+  .aegrid .aeproj,.aegrid .aefx{display:none}
+  .lr{grid-template-columns:1.6em .8em 8em 1fr}
+  .aeph{left:calc(11.2em + (100% - 11.2em) * var(--pp))}
+  .hggrid{columns:2}
+  .scgrid{grid-template-columns:1fr;grid-template-rows:1fr 1fr}
+  .ed{border-right:0;border-bottom:1px solid #000}
+  .code{font-size:.95em}
+  .aemenu .hide-n,.bhd .hide-n{display:none}
+}
+@media (max-width:960px){#side{display:none}}
+@media (max-width:700px){#tool,.fake{display:none}#vph .hide-m{display:none}#tl .tlf{display:none}.marks button span{display:none}}
+
+/* ---------- Lightbox ---------- */
+#lb{position:fixed;inset:0;z-index:50;display:none;place-items:center;background:rgba(5,5,6,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);padding:max(14px,env(safe-area-inset-top)) 14px 14px}
+#lb.on{display:grid;animation:pop .3s ease}
+.lbin{width:min(1000px,100%);max-height:100%;display:flex;flex-direction:column;gap:12px}
+.lbm{position:relative;width:100%;aspect-ratio:16/9;max-height:72vh;background:#000;border-radius:10px;overflow:hidden;outline:2px solid var(--or)}
+.lbm>img,.lbm>video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.lbm .ph i{font-size:90px}
+.lbt{display:flex;flex-direction:column;gap:4px;color:#ddd;font-size:15px}
+.lbt span{color:#999;font-size:13px}
+.lbx{position:absolute;right:max(14px,env(safe-area-inset-right));top:max(14px,env(safe-area-inset-top));width:36px;height:36px;border-radius:50%;background:#333;color:#fff;font-size:16px}
+.lbx:hover{background:var(--or);color:#111}
+:focus-visible{outline:2px solid #6ea8ff;outline-offset:2px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
 </style>
 </head>
 <body>
-<header>
-  <div class="ic">🕌</div>
-  <input id="sname" placeholder="মাদ্রাসার নাম লিখুন" aria-label="মাদ্রাসার নাম">
-  <p>হিসাব ব্যবস্থাপনা · নার্সারী থেকে পঞ্চম শ্রেণি</p>
-  <p id="sync" style="font-size:12px;margin-top:2px"></p>
-</header>
-<div class="wrap">
-<nav id="nav">
-  <button data-tab="home" class="on">📊 হিসাব</button>
-  <button data-tab="stu">👨‍🎓 ছাত্র-ছাত্রী</button>
-  <button data-tab="fee">💰 ফি</button>
-  <button data-tab="due">📋 বকেয়া</button>
-  <button data-tab="tea">👨‍🏫 শিক্ষক</button>
-<button data-tab="exp">💸 খরচ</button>
-  <button data-tab="rep">📅 রিপোর্ট</button>
-</nav>
-
-<section id="home" class="on">
-  <div class="cards" id="cards"></div>
-  <h2>শ্রেণিভিত্তিক হিসাব</h2>
-  <div class="card scroll"><table id="ctable"></table></div>
-</section>
-
-<section id="stu">
-  <details class="card bulk" id="promo"><summary>🎓 বছর শেষে ক্লাস ওঠানো ও নতুন রোল</summary>
-    <p class="note">বার্ষিক পরীক্ষার পর: ক্লাস বেছে প্রত্যেকের নতুন রোল লিখুন। যারা উত্তীর্ণ তাদের টিক রাখুন, যারা ওই ক্লাসেই থাকবে তাদের টিক তুলে দিন। <b>আগে পঞ্চম শ্রেণি দিয়ে শুরু করে নিচের দিকে (চতুর্থ, তৃতীয়...) আসুন।</b> পুরনো ফি ও বকেয়ার হিসাব আগের ক্লাসেই থাকবে।</p>
-    <label>কোন ক্লাস<select id="pm-cls"></select></label>
-    <div id="pm-list" style="margin-top:10px"></div>
-    <button class="btn full" id="pm-go" type="button" style="width:100%"></button>
-    <p class="note" id="pm-msg"></p>
-  </details>
-  <h2>নতুন ছাত্র/ছাত্রী যোগ করুন</h2>
-  <form class="card" id="sform">
-    <label class="full">নাম<input id="s-name" required placeholder="শিক্ষার্থীর নাম"></label>
-    <label>শ্রেণি<select id="s-cls"></select></label>
-    <label>রোল<input id="s-roll" inputmode="numeric" placeholder="রোল নম্বর"></label>
-    <label class="full">অভিভাবকের মোবাইল (ঐচ্ছিক)<input id="s-ph" inputmode="tel"></label>
-    <button class="btn full">➕ যোগ করুন</button>
-  </form>
-  <h2>শিক্ষার্থী তালিকা</h2>
-  <div class="filters"><select id="sf-cls"></select><select id="sf-st"><option value="a">✅ চালু</option><option value="i">❄️ ফ্রিজ</option><option value="">সবাই</option></select><input id="sf-q" placeholder="🔍 নাম দিয়ে খুঁজুন"></div>
-  <div id="slist"></div>
-</section>
-
-<section id="fee">
-  <h2>ফি / বেতন এন্ট্রি</h2>
-  <form class="card" id="fform">
-    <label>শ্রেণি<select id="f-cls"></select></label>
-    <label>শিক্ষার্থী<select id="f-stu" required></select></label>
-    <label>অবস্থা<select id="f-kind"><option value="p">✅ আদায় হয়েছে</option><option value="d">⏳ বকেয়া আছে</option></select></label>
-    <label>টাকার পরিমাণ<input id="f-amt" type="number" min="1" inputmode="numeric" required placeholder="৳"></label>
-    <label>মাস<select id="f-m"></select></label>
-    <label>সাল<input id="f-y" type="number" inputmode="numeric"></label>
-    <label class="full">কিসের জন্য (লিখুন)<input id="f-r" list="reasons" required placeholder="যেমন: মাসিক বেতন, ভর্তি ফি, পরীক্ষার ফি"></label>
-    <datalist id="reasons"><option value="মাসিক বেতন"><option value="ভর্তি ফি"><option value="পরীক্ষার ফি"><option value="বই/খাতা"><option value="ড্রেস"><option value="সেশন ফি"></datalist>
-    <label class="full">তারিখ<input id="f-dt" type="date"></label>
-    <button class="btn full">💾 সংরক্ষণ করুন</button>
-  </form>
-  <details class="card bulk"><summary>⚡ একসাথে পুরো ক্লাসের ফি বসান</summary>
-  <form id="bform" class="bgrid">
-    <label>শ্রেণি<select id="b-cls"></select></label>
-    <label>অবস্থা<select id="b-kind"><option value="d">⏳ বকেয়া</option><option value="p">✅ আদায়</option></select></label>
-    <label>মাস<select id="b-m"></select></label>
-    <label>সাল<input id="b-y" type="number"></label>
-    <label>কিসের জন্য<input id="b-r" value="মাসিক বেতন" required></label>
-    <label>প্রতি জনের টাকা<input id="b-a" type="number" min="1" required></label>
-    <button class="btn full">সবার জন্য যোগ করুন</button>
-    <p class="note full" id="b-msg"></p>
-  </form></details>
-  <h2>লেনদেনের তালিকা</h2>
-  <div class="filters"><select id="fl-cls"></select><select id="fl-kind"><option value="">সব অবস্থা</option><option value="p">আদায়</option><option value="d">বকেয়া</option></select><select id="fl-m"></select></div>
-  <div class="total" id="ftotal"></div>
-  <div id="flist"></div>
-</section>
-
-<section id="tea">
-  <h2>শিক্ষক যোগ করুন</h2>
-  <form class="card" id="tform">
-    <label>নাম<input id="t-name" required></label>
-    <label>পদবি<input id="t-des" placeholder="যেমন: সহকারী শিক্ষক"></label>
-    <label class="full">মাসিক বেতন (নির্ধারিত)<input id="t-sal" type="number" min="0" inputmode="numeric" placeholder="৳"></label>
-    <button class="btn full">➕ শিক্ষক যোগ করুন</button>
-  </form>
-  <div id="tlist" style="margin-top:10px"></div>
-  <h2>বেতন এন্ট্রি</h2>
-  <form class="card" id="pform">
-    <label>শিক্ষক<select id="p-tea" required></select></label>
-    <label>অবস্থা<select id="p-kind"><option value="p">✅ প্রদান করা হয়েছে</option><option value="d">⏳ বকেয়া আছে</option></select></label>
-    <label>মাস<select id="p-m"></select></label>
-    <label>সাল<input id="p-y" type="number" inputmode="numeric"></label>
-    <label>টাকার পরিমাণ<input id="p-amt" type="number" min="1" inputmode="numeric" required placeholder="৳"></label>
-    <label>তারিখ<input id="p-dt" type="date"></label>
-    <label class="full">কিসের জন্য (লিখুন)<input id="p-r" value="মাসিক বেতন" required></label>
-    <button class="btn full">💾 সংরক্ষণ করুন</button>
-  </form>
-  <details class="card bulk"><summary>⚡ সব শিক্ষকের মাসিক বেতন একসাথে বসান</summary>
-  <form id="tbform" class="bgrid">
-    <label>অবস্থা<select id="tb-kind"><option value="p">✅ প্রদান করা হয়েছে</option><option value="d">⏳ বকেয়া</option></select></label>
-    <label>মাস<select id="tb-m"></select></label>
-    <label>সাল<input id="tb-y" type="number"></label>
-    <label>কিসের জন্য<input id="tb-r" value="মাসিক বেতন" required></label>
-    <button class="btn full">সবার বেতন যোগ করুন</button>
-    <p class="note full" id="tb-msg"></p>
-  </form></details>
-  <h2>বেতনের তালিকা</h2>
-  <div class="filters"><select id="pl-kind"><option value="">সব অবস্থা</option><option value="p">প্রদান</option><option value="d">বকেয়া</option></select></div>
-  <div class="total" id="ptotal"></div>
-  <div id="plist"></div>
-</section>
-
-<section id="due">
-  <h2>বকেয়ার তালিকা</h2>
-  <div class="filters"><select id="d-cls"></select></div>
-  <div class="total" id="dtotal"></div>
-  <div id="dlist"></div>
-</section>
-<section id="exp">
-  <h2>অন্যান্য খরচ যোগ করুন</h2>
-  <form class="card" id="eform">
-    <label class="full">কিসের খরচ (লিখুন)<input id="e-r" list="ereasons" required placeholder="যেমন: বিদ্যুৎ বিল, বাড়ি ভাড়া, বাজার"></label>
-    <datalist id="ereasons"><option value="বিদ্যুৎ বিল"><option value="বাড়ি/ঘর ভাড়া"><option value="বাজার"><option value="মেরামত"><option value="পানি/গ্যাস বিল"><option value="অন্যান্য"></datalist>
-    <label>টাকার পরিমাণ<input id="e-a" type="number" min="1" inputmode="numeric" required></label>
-    <label>তারিখ<input id="e-dt" type="date"></label>
-    <label>মাস<select id="e-m"></select></label>
-    <label>সাল<input id="e-y" type="number"></label>
-    <button class="btn full">💾 সংরক্ষণ করুন</button>
-  </form>
-  <h2>খরচের তালিকা</h2>
-  <div class="total" id="etotal"></div>
-  <div id="elist"></div>
-</section>
-<section id="rep">
-  <h2 id="rep-title">মাসিক রিপোর্ট</h2>
-  <div class="filters noprint"><select id="r-m"></select><input id="r-y" type="number"><button class="btn alt" id="r-print" type="button">🖨️ প্রিন্ট</button></div>
-  <div class="cards" id="rcards"></div>
-  <div class="card scroll"><table id="rtable"></table></div>
-  <div id="rdetail"></div>
-  <p class="note">রিপোর্টে এন্ট্রির মাস (যে মাসের জন্য ফি/বেতন/খরচ) অনুযায়ী হিসাব দেখানো হয়।</p>
-</section>
-
-<details>
-  <summary>🔒 ডাটা ব্যাকআপ / ফিরিয়ে আনা</summary>
-  <p class="note">ℹ️ "ব্যাকআপ দেখান" চাপলে যে অদ্ভুত লেখা আসে, সেটা আপনার সব হিসাবের তথ্য কম্পিউটারের ভাষায় সাজানো। এটা পড়ার জন্য নয়। পুরোটা কপি করে মোবাইলের নোট বা হোয়াটসঅ্যাপে নিজের কাছে পাঠিয়ে রাখুন। কখনো হিসাব হারিয়ে গেলে সেই লেখা এখানে পেস্ট করে "ফিরিয়ে আনুন" চাপলেই সব ফিরে আসবে।</p>
-  <textarea id="bk" placeholder="এখানে ব্যাকআপ দেখাবে, অথবা পুরনো ব্যাকআপ পেস্ট করুন"></textarea>
-  <div class="filters"><button class="btn alt" id="bk-show" type="button">ব্যাকআপ দেখান</button><button class="btn alt" id="bk-copy" type="button">📋 কপি করুন</button><button class="btn alt" id="bk-load" type="button">ব্যাকআপ থেকে ফিরিয়ে আনুন</button></div>
-  <p class="note" id="bk-msg"></p>
-</details>
+<div id="app">
+  <header id="mbar">
+    <svg viewBox="0 0 24 24" aria-hidden="true"><rect x="1" y="1" width="22" height="22" rx="6" fill="#e87d0d"/><circle cx="13" cy="13" r="6" fill="none" stroke="#fff" stroke-width="2.4"/><circle cx="13" cy="13" r="2.4" fill="#fff"/><path d="M3.5 14.5 9 8.5l1.8 1.6-4.6 5.2z" fill="#fff"/></svg>
+    <span class="m">File</span><span class="m">Edit</span><span class="m">Render</span><span class="m">Window</span><span class="m">Help</span>
+    <span class="sp"></span><span class="fake">Scene</span><span class="fake">ViewLayer</span>
+  </header>
+  <nav id="tabs" aria-label="Workspaces"></nav>
+  <div id="main">
+    <aside id="tool" aria-hidden="true"><span class="on">⬚</span><span>✥</span><span>⟳</span><span>⤢</span><span>✎</span><span>✂</span></aside>
+    <section id="vpcol">
+      <div id="vph">
+        <span class="pl">▦ 3D Viewport</span><span class="m hide-m">View</span><span class="m hide-m">Select</span><span class="m hide-m">Add</span><span class="m hide-m">Object</span>
+        <span class="sp"></span>
+        <button class="btn" data-act="over" id="overBtn" title="Esc">⬡ Cube view</button>
+        <button class="btn" data-act="sound" id="sndBtn" title="Sound (M)">🔊</button>
+        <span class="m hide-m">Object Mode</span>
+      </div>
+      <div id="vp" class="over">
+        <div class="floor"></div><div class="glow"></div>
+        <div id="stage"><div id="cube"></div></div>
+        <div class="vpinfo">User Perspective<br>(1) Scene Collection | <b>Raven Studio</b></div>
+        <svg id="giz" viewBox="0 0 92 92" aria-label="Navigation gizmo"></svg>
+        <div class="hint">Drag to orbit · Click a face to open it</div>
+      </div>
+    </section>
+    <aside id="side">
+      <div class="ph2">▤ Outliner</div>
+      <div class="ol" id="outl"></div>
+      <div class="ph2">▥ Properties — Transform</div>
+      <div class="props">
+        <h4>Rotation</h4>
+        <div class="row3"><label>X</label><div class="val" id="rx">0.0°</div></div>
+        <div class="row3"><label>Y</label><div class="val">0.0°</div></div>
+        <div class="row3"><label>Z</label><div class="val" id="rz">0.0°</div></div>
+        <h4>Scene</h4>
+        <div class="row3"><label>Workspace</label><div class="val" id="wsn">Layout</div></div>
+      </div>
+    </aside>
+  </div>
+  <div id="tl">
+    <div class="tlc"><button data-act="prev" title="Previous (←)">⏮</button><button id="play" data-act="play" title="Play portfolio tour (Space)">▶</button><button data-act="next" title="Next (→)">⏭</button></div>
+    <div class="tlr"><div class="ticks"></div><div class="marks" id="marks"></div><div id="tlph"><span id="tlf">1</span></div></div>
+    <div class="tlf">Start 1 · End 250</div>
+  </div>
+  <footer id="status"><span><b>Click</b> Select</span><span><b>Drag</b> Orbit</span><span><b>Esc</b> Cube view</span><span><b>Space</b> Play tour</span><span><b>M</b> Sound</span><span class="sp"></span><span id="stx">Raven Studio 1.0</span></footer>
 </div>
+<div id="lb" role="dialog" aria-modal="true"></div>
 
-<div id="rc" hidden><div class="rcbox" id="rcbox"></div></div>
 <script>
-const CL=['নার্সারী','প্রথম শ্রেণি','দ্বিতীয় শ্রেণি','তৃতীয় শ্রেণি','চতুর্থ শ্রেণি','পঞ্চম শ্রেণি'];
-const MO=['জানুয়ারি','ফেব্রুয়ারি','মার্চ','এপ্রিল','মে','জুন','জুলাই','আগস্ট','সেপ্টেম্বর','অক্টোবর','নভেম্বর','ডিসেম্বর'];
-const KEY='madrasa-hisab-v1';
-let st={name:'',students:[],fees:[],teachers:[],pays:[],expenses:[]};
-try{const r=localStorage.getItem(KEY);if(r)st=Object.assign(st,JSON.parse(r))}catch(e){}
-const COLS=['students','fees','teachers','pays','expenses'];
-let dbh=null,ready=false,synced={},sname=null,nt;
-const werr=()=>{const el=document.getElementById('sync');if(el)el.textContent='⚠️ সংরক্ষণ হয়নি (শুধু দেখার অনুমতি থাকতে পারে)'};
-const save=()=>{
-  try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}
-  if(!dbh||!ready)return;
-  COLS.forEach(c=>{const cur={};(st[c]||[]).forEach(x=>cur[x.id]=JSON.stringify(x));const old=synced[c]||(synced[c]={});
-    Object.keys(cur).forEach(id=>{if(cur[id]!==old[id]){old[id]=cur[id];dbh.collection(c).doc(id).set(JSON.parse(cur[id])).catch(werr)}});
-    Object.keys(old).forEach(id=>{if(!(id in cur)){delete old[id];dbh.collection(c).doc(id).delete().catch(werr)}})});
-  if(st.name!==sname){clearTimeout(nt);nt=setTimeout(()=>{sname=st.name;dbh.doc('meta/main').set({name:st.name}).catch(werr)},700)}
+(()=>{
+/* =====================================================================
+   EDIT YOUR CONTENT HERE
+   - Replace placeholders with your real work. Set  src  to an image or
+     video URL/path (.jpg .png .webp .mp4 .webm). Leave src:'' for the
+     gradient placeholder.
+   ===================================================================== */
+const PROFILE={name:'Goni',studio:'Raven Studio',role:'3D Animator · VFX Artist · Motion Designer',place:'Chittagong, Bangladesh'};
+const CONTACT=[
+  ['Email','your@email.com','mailto:your@email.com'],
+  ['WhatsApp','+880 1XXX-XXXXXX','https://wa.me/8801XXXXXXXXX'],
+  ['Behance','behance.net/yourname','https://www.behance.net/'],
+  ['Instagram','@ravenstudio','https://www.instagram.com/'],
+  ['YouTube','youtube.com/@ravenstudio','https://www.youtube.com/'],
+  ['Facebook','facebook.com/ravenstudio','https://www.facebook.com/']
+];
+const WORKS={
+  anim:[
+    {t:'Cursed Hallway — Lighting Test',m:'3D Animation · Blender',c:['#ff8a3d','#220a00'],g:'◈',src:''},
+    {t:'Character Walk Cycle',m:'Character Animation · Blender',c:['#5aa7ff','#00112a'],g:'☺',src:''},
+    {t:'Product Orbit Reveal',m:'Product Visualization · Blender',c:['#e04bff','#14001f'],g:'◉',src:''},
+    {t:'Archviz Walkthrough',m:'Architectural Visualization · Blender',c:['#3ddcb0','#001d16'],g:'⌂',src:''},
+    {t:'Creature Rig Test',m:'Rigging · Blender',c:['#ffd24a','#2a1c00'],g:'☬',src:''},
+    {t:'Cinematic Fly-through',m:'Environment · Blender',c:['#ff5a6e','#240008'],g:'✈',src:''}
+  ],
+  vfx:[
+    {t:'Energy Beam Composite',m:'VFX · After Effects',c:['#6ea8ff','#00102a'],g:'✺',src:''},
+    {t:'Smoke & Fire Simulation',m:'VFX · After Effects',c:['#ff7a2f','#220800'],g:'♨',src:''},
+    {t:'Screen Replacement Track',m:'Tracking · After Effects',c:['#7cf0c4','#001a14'],g:'▭',src:''},
+    {t:'Glitch Title Sequence',m:'Motion Design · After Effects',c:['#ff4d9d','#200012'],g:'▚',src:''},
+    {t:'Particle Logo Reveal',m:'Motion Design · After Effects',c:['#b794ff','#12002b'],g:'✦',src:''},
+    {t:'Sky Replacement',m:'Compositing · After Effects',c:['#ffd36e','#241a00'],g:'☁',src:''}
+  ],
+  ai:[
+    {t:'Cursed House — Episode Teaser',m:'AI Video',model:'Kling',kind:'video',r:'16/9',c:['#9b5cff','#0d0020'],g:'☗',p:'Abandoned haunted mansion at dusk, slow dolly in, volumetric fog, cinematic horror, 35mm',src:''},
+    {t:'Street Style Editorial',m:'AI Image',model:'Soul',kind:'image',r:'3/4',c:['#ffb36b','#2a1200'],g:'♛',p:'Fashion influencer in oversized streetwear, golden hour, shallow depth of field, editorial',src:''},
+    {t:'Neon City Chase',m:'AI Video',model:'Veo',kind:'video',r:'9/16',c:['#35e0ff','#001a24'],g:'⚡',p:'Motorbike chase through rainy neon city at night, handheld camera, anamorphic flares',src:''},
+    {t:'Product Hero Shot',m:'AI Image',model:'Soul',kind:'image',r:'1/1',c:['#ff6aa8','#25001a'],g:'◍',p:'Luxury perfume bottle on black marble, water splash, rim light, macro, ultra sharp',src:''},
+    {t:'Ancient Temple Reveal',m:'AI Video',model:'Kling',kind:'video',r:'16/9',c:['#c9ff3d','#0f1a00'],g:'⛩',p:'Crane shot revealing a lost jungle temple at sunrise, god rays, mist, epic scale',src:''},
+    {t:'Cyber Portrait',m:'AI Image',model:'Soul',kind:'image',r:'3/4',c:['#6a7bff','#08092a'],g:'☻',p:'Cyberpunk portrait, chrome implants, rain on skin, teal and magenta lighting, 85mm',src:''}
+  ]
 };
-const $=s=>document.querySelector(s);
-const bn=n=>Number(n).toLocaleString('bn-BD');
-const money=n=>'৳ '+bn(n);
-const esc=s=>String(s==null?'':s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
-const uid=()=>Date.now().toString(36)+Math.random().toString(36).slice(2,6);
-const today=()=>new Date(Date.now()-new Date().getTimezoneOffset()*6e4).toISOString().slice(0,10);
-const fd=d=>d?new Date(d).toLocaleDateString('bn-BD',{day:'numeric',month:'short',year:'numeric'}):'';
-const sum=(a,k)=>a.filter(e=>e.kind===k).reduce((s,e)=>s+e.a,0);
-const opts=(arr,all)=>(all?`<option value="">${all}</option>`:'')+arr.map((x,i)=>`<option value="${i}">${x}</option>`).join('');
-const S=id=>st.students.find(x=>x.id===id);
-const T=id=>st.teachers.find(x=>x.id===id);
-const now=new Date();
+/* ===================================================================== */
 
-/* setup */
-$('#sname').value=st.name;
-$('#sname').oninput=e=>{st.name=e.target.value;document.title=(st.name||'মাদ্রাসা')+' – হিসাব';save()};
-document.title=(st.name||'মাদ্রাসা')+' – হিসাব';
-['#s-cls','#f-cls'].forEach(s=>$(s).innerHTML=opts(CL));
-['#sf-cls','#fl-cls'].forEach(s=>$(s).innerHTML=opts(CL,'সব শ্রেণি'));
-['#f-m','#p-m'].forEach(s=>{$(s).innerHTML=opts(MO);$(s).value=now.getMonth()});
-$('#fl-m').innerHTML=opts(MO,'সব মাস');
-['#f-y','#p-y'].forEach(s=>$(s).value=now.getFullYear());
-['#f-dt','#p-dt'].forEach(s=>$(s).value=today());
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const pad=(n,l=2)=>String(n).padStart(l,'0');
 
-/* extras */
-const byDt=(a,b)=>(b.dt||'').localeCompare(a.dt||'')||(b.ts||0)-(a.ts||0);
-const exs=a=>a.reduce((s,x)=>s+x.a,0);
-const yr=y=>bn(y).replace(/,/g,'');
-['#b-m','#tb-m','#e-m','#r-m'].forEach(s=>{$(s).innerHTML=opts(MO);$(s).value=now.getMonth()});
-['#b-y','#tb-y','#e-y','#r-y'].forEach(s=>$(s).value=now.getFullYear());
-$('#b-cls').innerHTML=opts(CL);$('#d-cls').innerHTML=opts(CL,'সব শ্রেণি');$('#e-dt').value=today();
-['#d-cls','#r-m','#r-y','#sf-st'].forEach(s=>$(s).oninput=()=>render());
-$('#eform').onsubmit=e=>{e.preventDefault();st.expenses.unshift({id:uid(),ts:Date.now(),r:$('#e-r').value.trim(),a:+$('#e-a').value,m:+$('#e-m').value,y:+$('#e-y').value,dt:$('#e-dt').value||today()});$('#e-r').value='';$('#e-a').value='';save();render()};
-$('#bform').onsubmit=e=>{e.preventDefault();
-  const c=+$('#b-cls').value,k=$('#b-kind').value,m=+$('#b-m').value,y=+$('#b-y').value,r=$('#b-r').value.trim(),a=+$('#b-a').value;let n=0,sk=0,fz=st.students.filter(s=>s.cls===c&&s.off).length;
-  st.students.filter(s=>s.cls===c&&!s.off).forEach(s=>{if(st.fees.some(f=>f.sid===s.id&&f.m===m&&f.y===y&&f.r===r)){sk++;return}st.fees.unshift({id:uid(),ts:Date.now()+n,sid:s.id,c:s.cls,kind:k,m,y,r,a,dt:today()});n++});
-  save();render();$('#b-msg').textContent=(fz?`❄️ ${bn(fz)} জন ফ্রিজ থাকায় বাদ। `:'')+`✅ ${bn(n)} জনের জন্য যোগ হয়েছে`+(sk?`, ${bn(sk)} জনের আগে থেকেই ছিল`:'')};
-$('#tbform').onsubmit=e=>{e.preventDefault();
-  const k=$('#tb-kind').value,m=+$('#tb-m').value,y=+$('#tb-y').value,r=$('#tb-r').value.trim();let n=0,sk=0;
-  st.teachers.forEach(t=>{if(!t.sal||st.pays.some(p=>p.tid===t.id&&p.m===m&&p.y===y&&p.r===r)){sk++;return}st.pays.unshift({id:uid(),ts:Date.now()+n,tid:t.id,kind:k,m,y,r,a:t.sal,dt:today()});n++});
-  save();render();$('#tb-msg').textContent=`✅ ${bn(n)} জনের বেতন যোগ হয়েছে`+(sk?`, ${bn(sk)} জন বাদ (আগে থেকে আছে বা বেতন নির্ধারিত নেই)`:'')};
-$('#r-print').onclick=()=>{try{window.print()}catch(e){}};
-$('#rc').onclick=e=>{if(e.target.id==='rc')$('#rc').hidden=true};
-window.addEventListener('afterprint',()=>document.body.classList.remove('prc'));
-function showRc(coll,id){
-  const e=st[coll].find(x=>x.id===id);if(!e)return;
-  const isF=coll==='fees',s=isF?S(e.sid):T(e.tid);if(!s)return;
-  const rows=[[isF?'শিক্ষার্থীর নাম':'শিক্ষকের নাম',esc(s.name)],isF?['শ্রেণি',CL[s.cls]+(s.roll?' · রোল '+esc(s.roll):'')]:['পদবি',esc(s.des||'শিক্ষক')],['কিসের জন্য',esc(e.r)],['মাস',MO[e.m]+' '+yr(e.y)],['তারিখ',fd(e.dt)]];
-  $('#rcbox').innerHTML=`<div class="rch"><div style="font-size:30px">🕌</div><b>${esc(st.name||'মাদ্রাসা')}</b><div>${isF?'ফি আদায়ের রসিদ':'বেতন প্রদানের রসিদ'}</div><small>রসিদ নং: ${e.id.slice(-6).toUpperCase()}</small></div>`
-   +rows.map(r=>`<div class="rcr"><span>${r[0]}</span><b>${r[1]}</b></div>`).join('')
-   +`<div class="rcr tot"><span>${isF?'আদায়কৃত টাকা':'প্রদত্ত টাকা'}</span><b>${money(e.a)}</b></div><div class="rcs"><span>${isF?'গ্রহণকারীর স্বাক্ষর':'শিক্ষকের স্বাক্ষর'}</span></div><div class="rcb noprint"><button class="btn" id="rc-p">🖨️ প্রিন্ট</button><button class="btn alt" id="rc-x">বন্ধ করুন</button></div>`;
-  $('#rc').hidden=false;
-  $('#rc-x').onclick=()=>{$('#rc').hidden=true;document.body.classList.remove('prc')};
-  $('#rc-p').onclick=()=>{document.body.classList.add('prc');try{window.print()}catch(x){}};
+const TABS=[
+  {id:'front',name:'Layout',ic:'▦',lab:'L'},
+  {id:'right',name:'Animation',ic:'🎞',lab:'A'},
+  {id:'back',name:'Compositing',ic:'✺',lab:'C'},
+  {id:'left',name:'AI Studio',ic:'✦',lab:'AI'},
+  {id:'top',name:'About',ic:'⌨',lab:'i'},
+  {id:'bottom',name:'Contact',ic:'⚙',lab:'@'}
+];
+const ORDER=TABS.map(t=>t.id);
+const FACES={front:{rx:0,ry:0},right:{rx:0,ry:-90},back:{rx:0,ry:180},left:{rx:0,ry:90},top:{rx:-90,ry:0},bottom:{rx:90,ry:0}};
+
+/* ---------- media helpers ---------- */
+function media(w,big){
+  if(w.src){
+    if(/\.(mp4|webm|mov)(\?|$)/i.test(w.src)) return `<video src="${esc(w.src)}" ${big?'controls':''} autoplay muted loop playsinline></video>`;
+    return `<img src="${esc(w.src)}" alt="${esc(w.t)}" loading="lazy">`;
+  }
+  return `<div class="ph" style="--a:${w.c[0]};--b:${w.c[1]}"><i>${w.g||'◆'}</i></div>`;
 }
-function renderMore(){
-  const dc=$('#d-cls').value;
-  const dl=st.students.filter(s=>dc===''||s.cls===+dc).map(s=>({s,d:st.fees.filter(f=>f.sid===s.id&&f.kind==='d')})).filter(z=>z.d.length).sort((a,b)=>a.s.cls-b.s.cls||(+a.s.roll||0)-(+b.s.roll||0));
-  $('#dtotal').innerHTML=`<span>⏳ মোট বকেয়া: ${money(dl.reduce((n,z)=>n+exs(z.d),0))}</span><span>👥 ${bn(dl.length)} জন</span>`;
-  $('#dlist').innerHTML=dl.length?dl.map(({s,d})=>{const msg=encodeURIComponent('আসসালামু আলাইকুম, '+s.name+' এর বকেয়া '+money(exs(d))+' ('+(st.name||'মাদ্রাসা')+')। অনুগ্রহ করে পরিশোধ করুন।');
-    return `<div class="row"><div class="rm"><b>${esc(s.name)}${s.off?' <span class="badge d">❄️ ফ্রিজ</span>':''} <small>(${CL[s.cls]}${s.roll?', রোল '+esc(s.roll):''})</small></b><small>${d.map(f=>esc(f.r)+' ('+MO[f.m]+') '+money(f.a)).join(' · ')}</small></div><div class="ra"><span class="amt d">${money(exs(d))}</span>${s.ph?`<a class="mini" href="tel:${esc(s.ph)}">📞 কল</a><a class="mini" href="sms:${esc(s.ph)}?body=${msg}">💬 এসএমএস</a>`:''}<button class="mini" data-act="payall:fees:${s.id}">সব আদায়</button></div></div>`}).join(''):'<div class="empty">🎉 কোনো বকেয়া নেই</div>';
-  const el=[...st.expenses].sort(byDt);
-  $('#etotal').innerHTML=`<span>💸 মোট খরচ: ${money(exs(st.expenses))}</span>`;
-  $('#elist').innerHTML=el.length?el.map(x=>`<div class="row"><div class="rm"><b>${esc(x.r)}</b><small>${MO[x.m]} ${yr(x.y)} · ${fd(x.dt)}</small></div><div class="ra"><span class="amt d">${money(x.a)}</span><button class="mini x" data-act="del:expenses:${x.id}">মুছুন</button></div></div>`).join(''):'<div class="empty">কোনো খরচ নেই</div>';
-  const m=+$('#r-m').value,y=+$('#r-y').value,fm=st.fees.filter(f=>f.m===m&&f.y===y),pm=st.pays.filter(f=>f.m===m&&f.y===y),xm=st.expenses.filter(f=>f.m===m&&f.y===y);
-  const a=sum(fm,'p'),b=sum(fm,'d'),c=sum(pm,'p'),d=sum(pm,'d'),x=exs(xm);
-  $('#rep-title').textContent=(st.name||'মাদ্রাসা')+' – '+MO[m]+' '+yr(y)+' এর রিপোর্ট';
-  $('#rcards').innerHTML=`<div class="card stat g"><small>ফি আদায়</small><b>${money(a)}</b></div><div class="card stat r"><small>ফি বকেয়া</small><b>${money(b)}</b></div><div class="card stat y"><small>শিক্ষক বেতন প্রদান</small><b>${money(c)}</b></div><div class="card stat r"><small>শিক্ষক বেতন বকেয়া</small><b>${money(d)}</b></div><div class="card stat y"><small>অন্যান্য খরচ</small><b>${money(x)}</b></div><div class="card stat big"><small>এই মাসের নিট (আদায় − বেতন − খরচ)</small><b>${money(a-c-x)}</b></div>`;
-  let rr='';CL.forEach((cn,i)=>{const l=fm.filter(f=>fcl(f)===i);rr+=`<tr><td>${cn}</td><td>${money(sum(l,'p'))}</td><td>${money(sum(l,'d'))}</td></tr>`});
-  $('#rtable').innerHTML=`<thead><tr><th>শ্রেণি</th><th>আদায়</th><th>বকেয়া</th></tr></thead><tbody>${rr}</tbody><tfoot><tr><td>মোট</td><td>${money(a)}</td><td>${money(b)}</td></tr></tfoot>`;
+const bhd=(title,items=[])=>`<div class="bhd"><span class="pill">${title}</span>${items.map(i=>`<span class="mi hide-n">${i}</span>`).join('')}<span class="sp"></span><span class="dim">${PROFILE.studio}</span></div>`;
+
+/* ---------- face builders ---------- */
+function buildFront(){
+  return `<div class="fi">
+  ${bhd('▦ 3D Viewport',['View','Select','Add','Object'])}
+  <div class="bbody">
+    <div class="tbar"><span class="on">⬚</span><span>✥</span><span>⟳</span><span>⤢</span><span>✎</span></div>
+    <div class="vpm">
+      <svg class="wiresvg" viewBox="-130 -125 260 250" aria-hidden="true">
+        <path class="cb" d="M0-100 87-50 0 0-87-50Z"/><path class="cb" d="M-87-50 0 0 0 100-87 50Z"/><path class="cb" d="M0 0 87-50 87 50 0 100Z"/>
+        <path class="dash" d="M-125 0H125M0-120V120" />
+        <circle cx="0" cy="0" r="5" fill="var(--or)"/>
+      </svg>
+      <div class="hero">
+        <h1>RAVEN<span>STUDIO</span></h1>
+        <p>${PROFILE.role}</p>
+        <button class="cta" data-go="right">▶ Enter portfolio</button>
+      </div>
+    </div>
+    <div class="olm"><div class="h">▤ Outliner</div><div>▾ Scene Collection</div><div style="padding-left:2.1em">▾ Raven Studio</div><div class="s" style="padding-left:3.3em">▣ Cube</div><div style="padding-left:3.3em">🎥 Camera</div><div style="padding-left:3.3em">💡 Light</div><div style="padding-left:2.1em;margin-top:.8em;color:#888">${PROFILE.place}</div></div>
+  </div></div>`;
 }
-const _r=render;
-render=function(){const pv=$('#p-tea').value;_r();if(pv)$('#p-tea').value=pv;renderMore();renderDetail()};
-
-/* full monthly report */
-function renderDetail(){
-  const m=+$('#r-m').value,y=+$('#r-y').value,inM=f=>f.m===m&&f.y===y;
-  const fe=st.fees.filter(inM).sort((a,b)=>fcl(a)-fcl(b)||(a.dt||'').localeCompare(b.dt||'')),fp=fe.filter(f=>f.kind==='p'),fdu=fe.filter(f=>f.kind==='d');
-  const pe=st.pays.filter(inM).sort(byDt),xe=st.expenses.filter(inM).sort(byDt);
-  const A=exs(fp),B=exs(fdu),C=sum(pe,'p'),D=sum(pe,'d'),X=exs(xe);
-  const nm=f=>{const s=S(f.sid);return s?esc(s.name):'—'};
-  const tr=c=>`<tr>${c.map(x=>`<td>${x}</td>`).join('')}</tr>`;
-  const tbl=(title,head,rows,foot)=>`<h2>${title}</h2>`+(rows.length?`<div class="card scroll"><table><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody><tfoot><tr>${foot}</tr></tfoot></table></div>`:'<div class="empty">এই মাসে কিছু নেই</div>');
-  $('#rdetail').innerHTML=
-    tbl('💰 ফি আদায়ের বিস্তারিত',['শিক্ষার্থী','শ্রেণি','কিসের জন্য','তারিখ','টাকা'],fp.map(f=>tr([nm(f),CL[fcl(f)],esc(f.r),fd(f.dt),money(f.a)])),`<td colspan="4">মোট আদায়</td><td>${money(A)}</td>`)
-   +tbl('⏳ বকেয়ার বিস্তারিত',['শিক্ষার্থী','শ্রেণি','কিসের জন্য','টাকা'],fdu.map(f=>tr([nm(f),CL[fcl(f)],esc(f.r),money(f.a)])),`<td colspan="3">মোট বকেয়া</td><td>${money(B)}</td>`)
-   +tbl('👨‍🏫 শিক্ষকদের বেতন',['শিক্ষক','কিসের জন্য','অবস্থা','তারিখ','টাকা'],pe.map(p=>{const t=T(p.tid);return tr([t?esc(t.name):'—',esc(p.r),p.kind==='p'?'প্রদান':'বকেয়া',fd(p.dt),money(p.a)])}),`<td colspan="4">মোট (প্রদান ${money(C)} · বকেয়া ${money(D)})</td><td>${money(C+D)}</td>`)
-   +tbl('💸 অন্যান্য খরচ',['কিসের খরচ','তারিখ','টাকা'],xe.map(x=>tr([esc(x.r),fd(x.dt),money(x.a)])),`<td colspan="2">মোট খরচ</td><td>${money(X)}</td>`)
-   +`<div class="card" style="margin-top:14px"><b>সারাংশ:</b> আদায় ${money(A)} − শিক্ষক বেতন ${money(C)} − খরচ ${money(X)} = <b>নিট ${money(A-C-X)}</b></div><div class="rsign"><span>হিসাবরক্ষক</span><span>পরিচালক / মুহতামিম</span></div>`;
+function buildAnim(){
+  const W=WORKS.anim,n=W.length;
+  return `<div class="fi">
+  ${bhd('🎞 Animation',['Camera View','Frame','Shot'])}
+  <div class="agrid">
+    <div class="cam" id="cam-anim"></div>
+    <div class="olx"><div class="bhd" style="height:2.3em"><span class="pill">▤ Outliner</span></div>${W.map((w,i)=>`<div class="orow" data-sel="anim:${i}"><span>🎥</span><span>Shot_${pad(i+1)} — ${esc(w.t)}</span></div>`).join('')}</div>
+    <div class="dope">
+      <div class="dhd"><span class="pill">≣ Dope Sheet</span><span class="mi hide-n">Summary</span><span class="sp"></span><span class="mi" id="fr-anim">Frame 001</span></div>
+      <div class="drows" id="drows">
+        <div class="dr rul"><span class="dn dim">Frame</span><div class="dt"></div></div>
+        ${W.map((w,i)=>`<div class="dr" data-sel="anim:${i}"><span class="dn">▸ Shot_${pad(i+1)}</span><div class="dt"><b class="bar" style="left:${i/n*78}%;width:22%"></b></div></div>`).join('')}
+        <div class="pline"></div>
+      </div>
+    </div>
+  </div></div>`;
 }
-/* roll edit & promotion */
-const fcl=f=>f.c!=null?f.c:(S(f.sid)||{}).cls;
-$('#pm-cls').innerHTML=opts(CL);$('#pm-cls').value=CL.length-1;
-function pmList(){
-  const c=+$('#pm-cls').value,last=c===CL.length-1,l=st.students.filter(s=>s.cls===c&&!s.off).sort((a,b)=>(+a.roll||0)-(+b.roll||0));
-  $('#pm-list').innerHTML=l.length?l.map(s=>`<div class="row" data-id="${s.id}"><div class="rm"><b>${esc(s.name)}</b><small>বর্তমান রোল: ${esc(s.roll||'—')}</small></div><div class="ra"><label style="display:flex;align-items:center;gap:6px;color:var(--ink)"><input type="checkbox" class="pm-c" checked>${last?'পাশ (শেষ)':'উত্তীর্ণ'}</label><input class="pm-r" inputmode="numeric" placeholder="নতুন রোল" value="${esc(s.roll)}"></div></div>`).join(''):'<div class="empty">এই ক্লাসে কেউ নেই</div>';
-  $('#pm-go').textContent=last?'✅ পাশ করাদের ফ্রিজ করুন ও রোল সংরক্ষণ':'✅ উত্তীর্ণদের পরের ক্লাসে উঠান ও রোল সংরক্ষণ';
+const FX=[['Glow',['Threshold','Radius','Intensity']],['Fractal Noise',['Contrast','Brightness','Evolution']],['CC Particle World',['Birth Rate','Longevity','Velocity']],['Lumetri Color',['Exposure','Contrast','Saturation']],['Deep Glow',['Radius','Exposure','Dither']],['Keylight (1.2)',['Screen Gain','Clip Black','Despill']]];
+const LC=['#e8678a','#f2b24c','#6ec7a0','#6aa6ff','#b794ff','#ff8f5a'];
+function buildVfx(){
+  const W=WORKS.vfx,n=W.length;
+  return `<div class="fi ae">
+  <div class="aemenu"><b class="aelogo">Ae</b><span>File</span><span>Edit</span><span class="hide-n">Composition</span><span class="hide-n">Layer</span><span class="hide-n">Effect</span><span class="hide-n">Animation</span><span class="hide-n">View</span><span class="sp"></span><span class="dim">Standard</span><span class="dim hide-n">Libraries</span></div>
+  <div class="aetools"><span>➤</span><span>✋</span><span>⌕</span><span>⟳</span><span class="on">◧</span><span>▢</span><span>✎</span><span>T</span><span>⬡</span></div>
+  <div class="aegrid">
+    <div class="aep aeproj"><div class="aeh">Project <i>≡</i></div><div class="aelist">${W.map((w,i)=>`<div class="aeit" data-sel="vfx:${i}"><div class="th">${media(w)}</div><div>${esc(w.t)}<small>${esc(w.m.split(' · ')[0])} · 1920×1080</small></div></div>`).join('')}</div></div>
+    <div class="aep"><div class="aeh">Composition <i id="cn-vfx">Comp 1</i></div><div class="aeview" id="aeview"></div>
+      <div class="aectl"><span>50% ▾</span><span class="tc" id="tc2">0:00:00:00</span><span class="hide-n">Full ▾</span><span class="sp"></span><span>Active Camera ▾</span></div></div>
+    <div class="aep aefx"><div class="aeh">Effect Controls <i id="fxn">—</i></div><div class="aelist" id="fxl"></div></div>
+    <div class="aep aetl">
+      <div class="aeh"><span class="tc" id="tc-vfx">0:00:00:00</span><i>24.00 fps</i><i class="hide-n">Composition 1</i></div>
+      <div class="lay" id="lay">
+        <div class="lr rul"><span></span><span></span><span class="nm dim">Layer name</span><div style="position:relative;height:100%;background-image:repeating-linear-gradient(90deg,#777 0 1px,transparent 1px 10%);background-size:100% 45%;background-repeat:no-repeat;background-position:bottom"></div></div>
+        ${W.map((w,i)=>`<div class="lr" data-sel="vfx:${i}" style="--lc:${LC[i%6]}"><span class="no">${i+1}</span><span class="lc"></span><span class="nm">${esc(w.t)}</span><div style="position:relative;height:100%"><b class="lbar" style="left:${i/n*78}%;width:22%"></b></div></div>`).join('')}
+        <div class="aeph"></div>
+      </div>
+    </div>
+  </div></div>`;
 }
-$('#pm-cls').oninput=()=>{pmList();$('#pm-msg').textContent=''};
-$('#promo').addEventListener('toggle',()=>{if($('#promo').open)pmList()});
-$('#pm-go').onclick=()=>{
-  let up=0,stay=0;
-  document.querySelectorAll('#pm-list .row').forEach(r=>{const s=S(r.dataset.id);if(!s)return;
-    const go=r.querySelector('.pm-c').checked;s.roll=r.querySelector('.pm-r').value.trim();
-    if(go){st.fees.forEach(f=>{if(f.sid===s.id&&f.c==null)f.c=s.cls});
-      if(s.cls>=CL.length-1){s.off=true;s.offDt=today()}else s.cls=s.cls+1;up++}else stay++});
-  save();render();pmList();
-  $('#pm-msg').textContent=`✅ ${bn(up)} জন উত্তীর্ণ, ${bn(stay)} জন একই ক্লাসে। নতুন রোল সংরক্ষিত হয়েছে।`};
-function editStu(id){
-  const s=S(id);if(!s)return;
-  $('#rcbox').innerHTML=`<h3 style="margin:0 0 8px">✏️ তথ্য সম্পাদনা</h3><label>নাম<input id="e2-n" value="${esc(s.name)}"></label><label>শ্রেণি<select id="e2-c">${opts(CL)}</select></label><label>রোল<input id="e2-r" inputmode="numeric" value="${esc(s.roll)}"></label><label>অভিভাবকের মোবাইল<input id="e2-p" inputmode="tel" value="${esc(s.ph)}"></label><div class="rcb"><button class="btn" id="e2-s">💾 সংরক্ষণ</button><button class="btn alt" id="e2-x">বাতিল</button></div>`;
-  $('#e2-c').value=s.cls;$('#rc').hidden=false;
-  $('#e2-x').onclick=()=>$('#rc').hidden=true;
-  $('#e2-s').onclick=()=>{const n=$('#e2-n').value.trim();if(!n)return;const c=+$('#e2-c').value;
-    if(c!==s.cls)st.fees.forEach(f=>{if(f.sid===id&&f.c==null)f.c=s.cls});
-    s.name=n;s.cls=c;s.roll=$('#e2-r').value.trim();s.ph=$('#e2-p').value.trim();
-    $('#rc').hidden=true;save();render()};
+function buildAi(){
+  const W=WORKS.ai;
+  return `<div class="fi hg">
+  <div class="hgrail"><b>R</b><span class="on">✦</span><span>▶</span><span>◎</span><span>▣</span><span>⚙</span></div>
+  <div class="hgmain">
+    <div class="hgtop"><strong>RAVEN<em> AI</em></strong><span class="chip hide-n">Create</span><span class="dim hide-n">Explore</span><span class="dim hide-n">Assets</span><span class="sp"></span><span class="chip">∞ credits</span></div>
+    <div class="hgprompt">
+      <div class="ptxt"><span id="ptx"></span><i class="caret"></i></div>
+      <div class="prow"><span class="chip">◐ Soul 2.0 ▾</span><span class="chip">16:9</span><span class="chip">Cinematic</span><span class="sp"></span><button class="gen" id="gen">✦ Generate</button></div>
+    </div>
+    <div class="hgf"><button class="on" data-flt="all">All</button><button data-flt="image">Images</button><button data-flt="video">Videos</button></div>
+    <div class="hggrid" id="hgrid">${W.map((w,i)=>`<div class="tile" data-ai="${i}" data-kind="${w.kind}"><div class="mw" style="--r:${w.r}">${media(w)}</div><span class="bd">${w.kind==='video'?'▶ 0:05':'▣ Image'} · ${esc(w.model)}</span><div class="cap"><small>${esc(w.model)}</small>${esc(w.t)}</div></div>`).join('')}</div>
+  </div></div>`;
+}
+const CODE=[
+ ['<span class="k">import</span> bpy'],
+ [''],
+ ['<span class="k">class</span> <span class="f">Artist</span>:'],
+ ['    name   = <span class="s">"'+PROFILE.name+'"</span>'],
+ ['    studio = <span class="s">"'+PROFILE.studio+'"</span>'],
+ ['    place  = <span class="s">"'+PROFILE.place+'"</span>'],
+ ['    skills = [<span class="s">"3D Animation"</span>, <span class="s">"VFX &amp; Compositing"</span>,'],
+ ['              <span class="s">"Motion Design"</span>, <span class="s">"AI Filmmaking"</span>]'],
+ ['    tools  = [<span class="s">"Blender"</span>, <span class="s">"After Effects"</span>, <span class="s">"Higgsfield"</span>]'],
+ [''],
+ ['    <span class="k">def</span> <span class="f">available</span>(self):'],
+ ['        <span class="c"># open for freelance &amp; collaboration</span>'],
+ ['        <span class="k">return</span> <span class="n">True</span>'],
+ [''],
+ ['artist = <span class="f">Artist</span>()'],
+ ['<span class="f">print</span>(artist.name, artist.studio)']
+];
+const CON=[
+ ['q','>>> artist = Artist()'],
+ ['q','>>> print(artist.name, artist.studio)'],
+ ['a',PROFILE.name+' '+PROFILE.studio],
+ ['q','>>> artist.skills'],
+ ['a',"['3D Animation', 'VFX & Compositing', 'Motion Design', 'AI Filmmaking']"],
+ ['q','>>> artist.place'],
+ ['a',"'"+PROFILE.place+"'"],
+ ['q','>>> artist.available()'],
+ ['a','True  # let’s make something']
+];
+function buildAbout(){
+  return `<div class="fi">
+  ${bhd('⌨ Text Editor',['Text','Edit','Select','Format','Templates'])}
+  <div class="scgrid">
+    <div class="ed"><div class="edt"><span class="on">about_me.py</span><span>skills.py</span><span class="sp" style="background:none"></span><button class="run" data-act="run">▶ Run Script</button></div>
+      <div class="code">${CODE.map(l=>`<div>${l[0]||' '}</div>`).join('')}</div></div>
+    <div class="con"><div class="bhd" style="height:2.4em"><span class="pill">▤ Python Console</span></div><div class="cout" id="cout"></div></div>
+  </div></div>`;
+}
+function buildContact(){
+  return `<div class="fi">
+  ${bhd('⚙ Properties',['Render','Output','View Layer','Scene','World'])}
+  <div class="ctbody">
+    <div class="ctside"><span class="on">▣</span><span>▤</span><span>◐</span><span>⚙</span></div>
+    <div class="ctmain">
+      <div class="pn"><h3>▾ Status</h3><div class="status">Available for freelance projects</div></div>
+      <div class="pn"><h3>▾ Contact</h3>${CONTACT.map(c=>`<div class="fld"><span>${c[0]}</span><a href="${esc(c[2])}" target="_blank" rel="noopener">${esc(c[1])}</a></div>`).join('')}<div style="height:.4em"></div></div>
+      <button class="render" data-act="render">🎬 Render Image · F12</button>
+      <div class="rbar"><i id="rbi"></i></div><div class="rmsg" id="rmsg">Send me a message — click to open your email app.</div>
+    </div></div></div>`;
+}
+const BUILD={front:buildFront,right:buildAnim,back:buildVfx,left:buildAi,top:buildAbout,bottom:buildContact};
+
+/* ---------- DOM setup ---------- */
+const vp=$('#vp'),stage=$('#stage'),cube=$('#cube'),giz=$('#giz'),lb=$('#lb');
+const wraps={};
+ORDER.forEach(id=>{
+  const f=document.createElement('div'); f.className='face'; f.dataset.f=id;
+  const w=document.createElement('div'); w.className='wrap'; w.id='w-'+id; w.innerHTML=BUILD[id]();
+  f.appendChild(w); cube.appendChild(f); wraps[id]=w;
+});
+$('#tabs').innerHTML=TABS.map(t=>`<button data-go="${t.id}" data-tab="${t.id}"><span>${t.ic}</span>${t.name}</button>`).join('');
+$('#outl').innerHTML=`<button><span>▾</span> Scene Collection</button><button class="l1"><span>▾</span> Raven Studio</button>`+TABS.map(t=>`<button class="l1" style="padding-left:40px" data-go="${t.id}" data-ol="${t.id}">${t.ic} ${t.name}</button>`).join('');
+$('#marks').innerHTML=TABS.map((t,i)=>`<button data-go="${t.id}" data-mk="${t.id}" style="left:${(i+.5)/6*100}%"><i></i><span>${t.name}</span></button>`).join('');
+giz.innerHTML=TABS.map(t=>{
+  const col=(t.id==='right'||t.id==='left')?'#e0463c':(t.id==='top'||t.id==='bottom')?'#4d8dff':'#7bb33c';
+  return `<g data-go="${t.id}" data-g="${t.id}"><line x1="46" y1="46" x2="46" y2="46" stroke="${col}" stroke-width="2.5"/><circle r="10" cx="46" cy="46" fill="${col}"/><text>${t.lab}</text><title>${t.name}</title></g>`;
+}).join('');
+const gz={}; $$('#giz g').forEach(g=>gz[g.dataset.g]={g,l:g.querySelector('line'),c:g.querySelector('circle'),t:g.querySelector('text')});
+
+/* ---------- state ---------- */
+let mode='over',active='front',S=420,vw=800,vh=500,P=1400;
+const cur={rx:-40,ry:-230,k:.3}, tgt={rx:-10,ry:-22,k:1};
+let dragging=false,moved=0,lx=0,ly=0; const pm={x:.5,y:.5};
+const sel={anim:0,vfx:0,ai:0};
+let pauseUntil=0,touring=false,nextTour=0;
+const flatK=()=>Math.min(vw,vh)/S;
+const near=(a,ref)=>a+360*Math.round((ref-a)/360);
+
+function measure(){
+  const r=vp.getBoundingClientRect(); vw=Math.max(200,r.width); vh=Math.max(200,r.height);
+  S=Math.round(clamp(Math.min(vw,vh)*.66,240,560));
+  stage.style.setProperty('--S',S+'px');
+  layoutFaces();
+  if(mode==='face') tgt.k=flatK();
+}
+function layoutFaces(){
+  const k=flatK();
+  ORDER.forEach(id=>{
+    const w=wraps[id].style;
+    if(mode==='face'&&id===active){
+      const ww=vw/k, hh=vh/k;
+      w.width=ww+'px';w.height=hh+'px';w.left=(S-ww)/2+'px';w.top=(S-hh)/2+'px';w.fontSize=(12.5/k)+'px';
+    }else{
+      w.width=S+'px';w.height=S+'px';w.left='0px';w.top='0px';w.fontSize=(S/46)+'px';
+    }
+  });
+}
+function setUI(){
+  vp.classList.toggle('over',mode==='over'); vp.classList.toggle('flat',mode==='face');
+  $$('[data-tab]').forEach(b=>b.classList.toggle('on',b.dataset.tab===active));
+  $$('[data-ol]').forEach(b=>b.classList.toggle('on',b.dataset.ol===active));
+  $$('[data-mk]').forEach(b=>b.classList.toggle('on',b.dataset.mk===active));
+  const nm=TABS.find(t=>t.id===active).name; $('#wsn').textContent=nm;
+  $('#stx').textContent='Raven Studio · '+nm;
+  const tb=$('[data-tab].on'); if(tb&&tb.scrollIntoView) tb.scrollIntoView({block:'nearest',inline:'center'});
+}
+function goTo(id){
+  if(!FACES[id]) return;
+  if(mode==='face'&&active===id) return;
+  const was=mode; mode='face'; active=id;
+  const f=FACES[id];
+  tgt.rx=f.rx; tgt.ry=near(f.ry,cur.ry);
+  layoutFaces(); setUI();
+  SFX.whoosh(); setTheme(id); setTimeout(()=>SFX.arrive(),850);
+  if(was==='face'){ tgt.k=Math.max(.8,flatK()*.55); setTimeout(()=>{ if(mode==='face'&&active===id) tgt.k=flatK(); },520); }
+  else tgt.k=flatK();
+  onEnter(id);
+  if(touring) nextTour=performance.now()+5600;
+}
+function overview(){
+  if(mode==='over') return;
+  const f=FACES[active]; mode='over';
+  SFX.whoosh(); tgt.k=1; tgt.rx=f.rx===0?-10:f.rx*.65; tgt.ry=near(f.ry-22,cur.ry);
+  layoutFaces(); setUI();
+}
+const idx=()=>mode==='face'?ORDER.indexOf(active):0;
+
+/* ---------- selection renderers ---------- */
+const frames=k=>Math.round(((sel[k]/WORKS[k].length*78)+11)/100*249)+1;
+const pp=k=>((sel[k]/WORKS[k].length*78)+11)/100;
+function renderAnim(){
+  const w=WORKS.anim[sel.anim],f=frames('anim');
+  $('#cam-anim').innerHTML=`<div class="camframe in" data-open="anim:${sel.anim}">${media(w)}<span class="ov tl">User Perspective</span><span class="ov bl">(${f}) Shot_${pad(sel.anim+1)} | ${esc(w.t)}</span><span class="ov tr">${esc(w.m)}</span><span class="ov br">Open ⤢</span></div>`;
+  $$('#w-right [data-sel]').forEach(e=>e.classList.toggle('on',e.dataset.sel==='anim:'+sel.anim));
+  $('#drows').style.setProperty('--pp',pp('anim'));
+  $('#fr-anim').textContent='Frame '+pad(f,3);
+}
+const tcode=p=>{const s=p*10;return `0:00:${pad(Math.floor(s))}:${pad(Math.floor((s%1)*24))}`};
+function renderVfx(){
+  const w=WORKS.vfx[sel.vfx],p=pp('vfx');
+  $('#aeview').innerHTML=`<div class="aeframe in" data-open="vfx:${sel.vfx}">${media(w)}</div>`;
+  $$('#w-back [data-sel]').forEach(e=>e.classList.toggle('on',e.dataset.sel==='vfx:'+sel.vfx));
+  $('#lay').style.setProperty('--pp',p);
+  $('#tc-vfx').textContent=$('#tc2').textContent=tcode(p);
+  $('#fxn').textContent=w.t; $('#cn-vfx').textContent='Comp 1 · '+w.t;
+  const fx=FX[sel.vfx%FX.length];
+  $('#fxl').innerHTML=`<div class="fxr"><b>${fx[0]}</b>${fx[1].map((n,i)=>`<div class="sl"><span>${n}</span><s><i style="--d:${3+i*1.3}s;animation-delay:-${i*1.1}s"></i></s></div>`).join('')}</div><div class="fxr"><b>Transform</b><div class="sl"><span>Position</span><span style="color:#6fb0ff">960.0, 540.0</span></div><div class="sl"><span>Scale</span><span style="color:#6fb0ff">100.0, 100.0 %</span></div></div>`;
+}
+let typeT=null;
+function typePrompt(text,done){
+  clearInterval(typeT); const el=$('#ptx'); let i=0; el.textContent='';
+  typeT=setInterval(()=>{ i+=2; if(i%8===0)SFX.key(); el.textContent=text.slice(0,i); if(i>=text.length){clearInterval(typeT);done&&done();} },26);
+}
+function markAi(){
+  $$('#hgrid .tile').forEach(t=>t.classList.toggle('on',+t.dataset.ai===sel.ai));
+}
+function renderAi(animate){
+  const w=WORKS.ai[sel.ai];
+  if(animate){
+    $$('#hgrid .tile').forEach(t=>t.classList.remove('on'));
+    typePrompt(w.p,()=>{ const g=$('#gen'); g.classList.add('press'); SFX.gen(); setTimeout(()=>{g.classList.remove('press');markAi();const t=$(`#hgrid [data-ai="${sel.ai}"]`);t.classList.remove('fresh');void t.offsetWidth;t.classList.add('fresh');},320); });
+  }else{ clearInterval(typeT); $('#ptx').textContent=w.p; markAi(); }
+}
+function render(k,user){ if(k==='anim')renderAnim(); else if(k==='vfx')renderVfx(); else renderAi(!user); }
+function select(k,i,user){
+  sel[k]=(i+WORKS[k].length)%WORKS[k].length;
+  if(user) pauseUntil=performance.now()+9000;
+  render(k,user);
+}
+let conT=null;
+function runConsole(){
+  clearInterval(conT); const o=$('#cout'); o.innerHTML=''; let i=0;
+  conT=setInterval(()=>{ if(i>=CON.length){clearInterval(conT);return;} const [c,t]=CON[i++]; const d=document.createElement('div'); d.className=c; d.textContent=t; o.appendChild(d); if(active==='top')SFX.key(); o.scrollTop=o.scrollHeight; },420);
+}
+function onEnter(id){
+  if(id==='top') setTimeout(runConsole,500);
+  if(id==='left') setTimeout(()=>renderAi(true),700);
 }
 
-/* tabs */
-function tab(t){document.querySelectorAll('section').forEach(s=>s.classList.toggle('on',s.id===t));document.querySelectorAll('#nav button').forEach(b=>b.classList.toggle('on',b.dataset.tab===t));window.scrollTo({top:0,behavior:'smooth'})}
-$('#nav').onclick=e=>{const b=e.target.closest('button');if(b)tab(b.dataset.tab)};
-
-/* student select for fee form */
-function fillStu(sel){
-  const c=+$('#f-cls').value,l=st.students.filter(s=>s.cls===c&&(!s.off||s.id===sel)).sort((a,b)=>(+a.roll||0)-(+b.roll||0));
-  $('#f-stu').innerHTML=l.length?l.map(s=>`<option value="${s.id}">${esc(s.name)}${s.roll?' ('+esc(s.roll)+')':''}</option>`).join(''):'<option value="">— এই শ্রেণিতে কেউ নেই —</option>';
-  if(sel)$('#f-stu').value=sel;
+/* ---------- lightbox ---------- */
+function openLB(k,i){
+  const w=WORKS[k][i];
+  lb.innerHTML=`<div class="lbin"><div class="lbm">${media(w,true)}</div><div class="lbt"><b>${esc(w.t)}</b><span>${esc(w.m)}${w.p?' · '+esc(w.p):''}</span></div></div><button class="lbx" aria-label="Close">✕</button>`;
+  lb.classList.add('on'); SFX.open();
 }
-$('#f-cls').onchange=()=>fillStu();
+const closeLB=()=>{lb.classList.remove('on');lb.innerHTML='';};
 
-/* forms */
-$('#sform').onsubmit=e=>{e.preventDefault();
-  st.students.push({id:uid(),name:$('#s-name').value.trim(),cls:+$('#s-cls').value,roll:$('#s-roll').value.trim(),ph:$('#s-ph').value.trim()});
-  $('#s-name').value='';$('#s-roll').value='';$('#s-ph').value='';save();render();$('#s-name').focus()};
-$('#fform').onsubmit=e=>{e.preventDefault();
-  const sid=$('#f-stu').value;if(!sid){alert('আগে এই শ্রেণিতে শিক্ষার্থী যোগ করুন');return}
-  st.fees.unshift({id:uid(),ts:Date.now(),sid,c:(S(sid)||{}).cls,kind:$('#f-kind').value,m:+$('#f-m').value,y:+$('#f-y').value,r:$('#f-r').value.trim(),a:+$('#f-amt').value,dt:$('#f-dt').value||today()});
-  $('#f-amt').value='';save();render()};
-$('#tform').onsubmit=e=>{e.preventDefault();
-  st.teachers.push({id:uid(),name:$('#t-name').value.trim(),des:$('#t-des').value.trim(),sal:+$('#t-sal').value||0});
-  $('#t-name').value='';$('#t-des').value='';$('#t-sal').value='';save();render()};
-$('#pform').onsubmit=e=>{e.preventDefault();
-  const tid=$('#p-tea').value;if(!tid){alert('আগে শিক্ষক যোগ করুন');return}
-  st.pays.unshift({id:uid(),ts:Date.now(),tid,kind:$('#p-kind').value,m:+$('#p-m').value,y:+$('#p-y').value,r:$('#p-r').value.trim(),a:+$('#p-amt').value,dt:$('#p-dt').value||today()});
-  $('#p-amt').value='';save();render()};
-$('#p-tea').onchange=()=>{const t=T($('#p-tea').value);if(t&&t.sal)$('#p-amt').value=t.sal};
+/* ---------- tour / transport ---------- */
+const playBtn=$('#play');
+function setTour(on){ touring=on; playBtn.textContent=on?'❚❚':'▶'; if(on){ nextTour=performance.now()+4200; if(mode==='over') goTo('right'); } }
+function step(d){ goTo(ORDER[(idx()+d+6)%6]); }
+let rendering=false;
+function doRender(){
+  if(rendering) return; rendering=true;
+  const bar=$('#rbi'),msg=$('#rmsg'); bar.style.transition='none'; bar.style.width='0';
+  msg.textContent='Rendering… Sample 128/128';
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{bar.style.transition='width 1.3s cubic-bezier(.3,.7,.2,1)';bar.style.width='100%';}));
+  setTimeout(()=>{ SFX.ding(); msg.textContent='Finished ✓ — opening your email app'; location.href=CONTACT[0][2]; rendering=false; },1500);
+}
 
-/* filters */
-['#sf-cls','#sf-q','#fl-cls','#fl-kind','#fl-m','#pl-kind'].forEach(s=>$(s).oninput=render);
+/* ---------- audio: synthesized music for each interface + click SFX ---------- */
+/* Optional: put your own track (mp3/ogg URL or path) for any face to replace its built-in music. */
+const MUSIC={front:'',right:'',back:'',left:'',top:'',bottom:''};
+const AU={ctx:null,want:true,bus:null,face:'front',step:0,next:0,un:0};
+const m2f=m=>440*Math.pow(2,(m-69)/12);
+const live=()=>!!(AU.ctx&&AU.want&&AU.ctx.state!=='suspended');
+function auInit(){
+  if(AU.ctx) return; const C=window.AudioContext||window.webkitAudioContext; if(!C) return;
+  const c=AU.ctx=new C(); const comp=c.createDynamicsCompressor(); comp.connect(c.destination);
+  AU.master=c.createGain(); AU.master.gain.value=.9; AU.master.connect(comp);
+  AU.music=c.createGain(); AU.music.gain.value=.5; AU.music.connect(AU.master);
+  AU.sfxg=c.createGain(); AU.sfxg.gain.value=.8; AU.sfxg.connect(AU.master);
+  const nb=c.createBuffer(1,c.sampleRate,c.sampleRate),d=nb.getChannelData(0); for(let i=0;i<d.length;i++)d[i]=Math.random()*2-1; AU.nb=nb;
+  setInterval(sched,80);
+}
+function osc(type,f,t,dur,vol,dest,o={}){
+  const c=AU.ctx,g=c.createGain(),s=c.createOscillator(); s.type=type; s.frequency.setValueAtTime(f,t);
+  if(o.to) s.frequency.exponentialRampToValueAtTime(o.to,t+dur);
+  const a=o.a||.005; g.gain.setValueAtTime(.0001,t); g.gain.linearRampToValueAtTime(vol,t+Math.min(a,dur*.9)); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  let n=s; if(o.lp){const fl=c.createBiquadFilter();fl.type='lowpass';fl.frequency.value=o.lp;s.connect(fl);n=fl}
+  n.connect(g); g.connect(dest); s.start(t); s.stop(t+dur+.05);
+}
+function nz(t,dur,vol,dest,type,f0,f1,q){
+  const c=AU.ctx,s=c.createBufferSource(); s.buffer=AU.nb; s.loop=true;
+  const fl=c.createBiquadFilter(); fl.type=type||'bandpass'; fl.frequency.setValueAtTime(f0,t); if(f1) fl.frequency.exponentialRampToValueAtTime(f1,t+dur); fl.Q.value=q||1;
+  const g=c.createGain(); g.gain.setValueAtTime(.0001,t); g.gain.linearRampToValueAtTime(vol,t+Math.min(.05,dur/3)); g.gain.exponentialRampToValueAtTime(.0001,t+dur);
+  s.connect(fl); fl.connect(g); g.connect(dest); s.start(t); s.stop(t+dur+.05);
+}
+const sfxGo=fn=>{ if(!live())return; try{fn(AU.ctx.currentTime,AU.sfxg)}catch(e){} };
+const SFX={
+  click(){sfxGo((t,d)=>{osc('square',1900,t,.04,.1,d,{to:900});nz(t,.03,.14,d,'highpass',3000);osc('sine',320,t,.07,.2,d,{to:150});});},
+  hover(){sfxGo((t,d)=>osc('sine',1500,t,.025,.035,d));},
+  whoosh(){sfxGo((t,d)=>{nz(t,.9,.32,d,'bandpass',250,3200,1.2);osc('sine',140,t,.7,.22,d,{to:60});});},
+  arrive(){sfxGo((t,d)=>{osc('sine',110,t,.5,.5,d,{to:38});nz(t,.15,.1,d,'lowpass',900,200);});},
+  open(){sfxGo((t,d)=>{osc('triangle',440,t,.15,.16,d);osc('triangle',660,t+.07,.2,.16,d);osc('triangle',880,t+.14,.3,.14,d);});},
+  key(){sfxGo((t,d)=>osc('square',900+Math.random()*500,t,.02,.04,d));},
+  gen(){sfxGo((t,d)=>[784,988,1175,1568].forEach((f,i)=>osc('sine',f,t+i*.06,.35,.13,d)));},
+  ding(){sfxGo((t,d)=>{osc('sine',880,t,1.2,.22,d);osc('sine',1320,t,1,.14,d);osc('sine',1760,t,.8,.07,d);});}
+};
+const kick=(t,b,v)=>osc('sine',130,t,.25,v||.4,b,{to:42});
+const hat=(t,b,v)=>nz(t,.05,v||.06,b,'highpass',7000);
+const padN=(c,t,len,b,v,lp)=>c.forEach(m=>{osc('sawtooth',m2f(m),t,len,v,b,{a:len*.3,lp});osc('sawtooth',m2f(m)*1.006,t,len,v*.7,b,{a:len*.3,lp});});
+const TH={
+  front:{bpm:68,bar:32,ch:[[57,60,64],[53,57,60],[48,52,55],[55,59,62]],fn(n,t,c,d,b){
+    if(n%32===0){padN(c,t,d*32,b,.06,700);osc('sine',m2f(c[0]-24),t,d*32,.25,b,{a:d*6});}
+    if(n%8===4) osc('sine',m2f(c[(n>>3)%3]+24),t,1.6,.08,b,{a:.01});}},
+  right:{bpm:104,bar:16,ch:[[60,64,67],[57,60,64],[53,57,60],[55,59,62]],fn(n,t,c,d,b){
+    if(n%8===0) osc('triangle',m2f(c[0]-24),t,d*6,.3,b,{lp:500});
+    if(n%2===0) osc('triangle',m2f(c[[0,1,2,1,2,1,0,2][(n>>1)%8]]+12),t,.25,.13,b,{lp:2600});
+    if(n%4===2) hat(t,b,.03);}},
+  back:{bpm:60,bar:32,ch:[[50,53,57],[46,50,53],[43,46,50],[45,48,52]],fn(n,t,c,d,b){
+    if(n%32===0) padN(c.map(m=>m-12),t,d*32,b,.08,420);
+    if(n%16===0) kick(t,b,.5); if(n%16===3) kick(t,b,.25);
+    if(n%32===16) nz(t,d*14,.1,b,'bandpass',300,3000,2);
+    if(n%32===24) osc('sine',m2f(c[2]+24),t,3,.09,b);}},
+  left:{bpm:112,bar:16,ch:[[52,55,59],[48,52,55],[55,59,62],[50,54,57]],fn(n,t,c,d,b){
+    if(n%4===0) kick(t,b,.4); if(n%4===2) hat(t,b,.07);
+    if(n%2===0) osc('sawtooth',m2f(c[0]-12),t,d*1.8,.2,b,{lp:420});
+    osc('sawtooth',m2f(c[[0,1,2,1][n%4]]+(n%16<8?12:24)),t,d*1.4,.05,b,{lp:1800});}},
+  top:{bpm:78,bar:16,ch:[[53,57,60,64],[52,55,59,62],[50,53,57,60],[48,52,55,59]],fn(n,t,c,d,b){
+    if(n%16===0) c.forEach(m=>osc('sine',m2f(m),t,d*14,.09,b,{a:.04}));
+    if(n%16===0||n%16===10) osc('sine',110,t,.3,.3,b,{to:45});
+    if(n%8===4) hat(t,b,.03);
+    if(n%4===2&&Math.random()<.5) osc('sine',m2f(c[Math.floor(Math.random()*c.length)]+24),t,1.2,.08,b);}},
+  bottom:{bpm:64,bar:32,ch:[[53,57,60],[55,59,62],[50,53,57],[48,52,55]],fn(n,t,c,d,b){
+    if(n%32===0) padN(c,t,d*32,b,.045,900);
+    if(n%8===0) osc('sine',m2f(c[(n>>3)%3]+24),t,2.5,.1,b);}}
+};
+function sched(){
+  if(!live()||!AU.bus||MUSIC[AU.face]) return;
+  const th=TH[AU.face],d=60/th.bpm/4,now=AU.ctx.currentTime; if(AU.next<now-.5) AU.next=now;
+  while(AU.next<now+.3){ th.fn(AU.step,AU.next,th.ch[Math.floor(AU.step/th.bar)%th.ch.length],d,AU.bus); AU.next+=d; AU.step++; }
+}
+let userEl=null;
+function userTrack(id){
+  if(userEl){const e=userEl; userEl=null; let v=e.volume; const f=setInterval(()=>{v-=.1; if(v<=0){clearInterval(f);e.pause();}else e.volume=v;},80);}
+  if(MUSIC[id]){ const e=new Audio(MUSIC[id]); e.loop=true; e.volume=0; e.play().catch(()=>{}); userEl=e; let v=0; const f=setInterval(()=>{v+=.08; if(v>=.7){clearInterval(f);e.volume=.7;}else e.volume=v;},80); }
+}
+function setTheme(id){
+  AU.face=id; if(!AU.ctx||!AU.want) return;
+  const c=AU.ctx,now=c.currentTime;
+  if(AU.bus){const o=AU.bus; o.gain.cancelScheduledValues(now); o.gain.setTargetAtTime(0,now,.25); setTimeout(()=>{try{o.disconnect()}catch(e){}},2600);}
+  const b=AU.bus=c.createGain(); b.gain.value=0; b.connect(AU.music); b.gain.setTargetAtTime(1,now+.2,.5);
+  AU.step=0; AU.next=now+.25; userTrack(id);
+}
+function updBtn(){ $('#sndBtn').innerHTML=(AU.want?'🔊':'🔇')+'<span class="hide-m"> Sound '+(AU.want?'on':'off')+'</span>'; }
+function setSound(on){
+  AU.want=on;
+  if(on){ auInit(); if(AU.ctx) AU.ctx.resume().then(()=>setTheme(AU.face)); }
+  else{ if(AU.ctx) AU.ctx.suspend(); if(userEl) userEl.pause(); }
+  updBtn();
+}
+function unlock(){ if(AU.un) return; AU.un=1; if(!AU.want) return; auInit(); if(AU.ctx) AU.ctx.resume().then(()=>setTheme(AU.face)); }
+function uiDown(e){ if(e.target.closest('button,a,[data-sel],[data-go],[data-ai],[data-flt],.camframe,.aeframe,.tile')) SFX.click(); }
+let lastHover=null;
+document.addEventListener('pointerover',e=>{ const el=e.target.closest('[data-sel],[data-go],.tile,.btn'); if(el&&el!==lastHover){ lastHover=el; SFX.hover(); } else if(!el) lastHover=null; });
+document.addEventListener('visibilitychange',()=>{ if(!AU.ctx) return; if(document.hidden) AU.ctx.suspend(); else if(AU.want) AU.ctx.resume(); });
+updBtn();
 
-/* actions (tap twice to delete) */
-let armed=null;
+/* ---------- input ---------- */
+document.addEventListener('pointerdown',e=>{
+  moved=0; unlock(); uiDown(e);
+  if(mode==='over'&&e.target.closest('#stage')&&!lb.classList.contains('on')){ dragging=true; lx=e.clientX; ly=e.clientY; }
+});
+addEventListener('pointermove',e=>{
+  pm.x=e.clientX/innerWidth; pm.y=e.clientY/innerHeight;
+  if(!dragging) return;
+  const dx=e.clientX-lx,dy=e.clientY-ly; lx=e.clientX; ly=e.clientY; moved+=Math.abs(dx)+Math.abs(dy);
+  cur.ry+=dx*.45; tgt.ry+=dx*.45; cur.rx=clamp(cur.rx-dy*.45,-89,89); tgt.rx=cur.rx;
+});
+['pointerup','pointercancel'].forEach(ev=>addEventListener(ev,()=>{dragging=false}));
 document.addEventListener('click',e=>{
-  const b=e.target.closest('[data-act]');if(!b)return;
-  const [act,coll,id]=b.dataset.act.split(':');
-  if(act==='pay'){const x=st[coll].find(z=>z.id===id);if(x){x.kind='p';x.dt=today();save();render()}return}
-  if(act==='edit'){editStu(id);return}
-  if(act==='off'){const s=S(id);if(s){s.off=!s.off;s.offDt=s.off?today():'';save();render()}return}
-  if(act==='rc'){showRc(coll,id);return}
-  if(act==='payall'){st.fees.forEach(f=>{if(f.sid===id&&f.kind==='d'){f.kind='p';f.dt=today()}});save();render();return}
-  if(act==='qf'){tab('fee');const s=S(id);$('#f-cls').value=s.cls;fillStu(id);return}
-  if(act==='del'){
-    if(armed!==b.dataset.act){armed=b.dataset.act;b.textContent='নিশ্চিত?';setTimeout(()=>{if(armed===b.dataset.act){armed=null;b.textContent='মুছুন'}},3000);return}
-    armed=null;
-    if(coll==='students'){st.fees=st.fees.filter(f=>f.sid!==id)}
-    if(coll==='teachers'){st.pays=st.pays.filter(f=>f.tid!==id)}
-    st[coll]=st[coll].filter(z=>z.id!==id);save();render()}
+  const t=e.target;
+  if(lb.classList.contains('on')){ if(t===lb||t.closest('.lbx')) closeLB(); return; }
+  if(moved>6) return;
+  const act=t.closest('[data-act]');
+  if(act){
+    const a=act.dataset.act;
+    if(a==='sound')setSound(!AU.want); else if(a==='over')overview(); else if(a==='play')setTour(!touring); else if(a==='prev'){setTour(false);step(-1);} else if(a==='next'){setTour(false);step(1);}
+    else if(a==='run')runConsole(); else if(a==='render')doRender();
+    return;
+  }
+  const go=t.closest('[data-go]');
+  if(go){ setTour(false); goTo(go.dataset.go); return; }
+  if(!t.closest('#stage')) return;
+  if(mode==='over'){ const f=t.closest('.face'); if(f) goTo(f.dataset.f==='front'?'right':f.dataset.f); return; }
+  const op=t.closest('[data-open]'); if(op){ const [k,i]=op.dataset.open.split(':'); openLB(k,+i); return; }
+  const s=t.closest('[data-sel]'); if(s){ const [k,i]=s.dataset.sel.split(':'); select(k,+i,true); return; }
+  const ai=t.closest('[data-ai]'); if(ai){ const i=+ai.dataset.ai; select('ai',i,true); openLB('ai',i); return; }
+  const fl=t.closest('[data-flt]'); if(fl){
+    $$('#w-left [data-flt]').forEach(b=>b.classList.toggle('on',b===fl));
+    $$('#hgrid .tile').forEach(x=>x.style.display=(fl.dataset.flt==='all'||x.dataset.kind===fl.dataset.flt)?'':'none'); return; }
+});
+addEventListener('keydown',e=>{
+  if(e.key==='Escape'){ if(lb.classList.contains('on')) closeLB(); else {setTour(false);overview();} }
+  else if(e.key>='1'&&e.key<='6'){ setTour(false); goTo(ORDER[+e.key-1]); }
+  else if(e.key==='ArrowRight'){ setTour(false); step(1); }
+  else if(e.key==='ArrowLeft'){ setTour(false); step(-1); }
+  else if(e.key===' '){ e.preventDefault(); setTour(!touring); }
+  else if(e.key==='m'||e.key==='M'){ unlock(); setSound(!AU.want); }
 });
 
-/* rendering */
-function entryRow(e,coll,title,sub,lbl){
-  return `<div class="row"><div class="rm"><b>${title}</b><small>${sub} · ${MO[e.m]} ${bn(e.y).replace(/,/g,'')} · ${esc(e.r)} · ${fd(e.dt)}</small></div>
-  <div class="ra"><span class="amt ${e.kind}">${money(e.a)}</span><span class="badge ${e.kind}">${e.kind==='p'?lbl[0]:'বকেয়া'}</span>
-  ${e.kind==='d'?`<button class="mini" data-act="pay:${coll}:${e.id}">${lbl[1]}</button>`:''}
-  ${e.kind==='p'?`<button class="mini" data-act="rc:${coll}:${e.id}">🧾 রসিদ</button>`:''}<button class="mini x" data-act="del:${coll}:${e.id}">মুছুন</button></div></div>`}
-const totals=(l,a,b)=>`<span>✅ ${a}: ${money(sum(l,'p'))}</span><span>⏳ বকেয়া: ${money(sum(l,'d'))}</span><span>📋 মোট: ${money(sum(l,'p')+sum(l,'d'))}</span>`;
-
-function render(){
-  fillStu($('#f-stu').value);
-  $('#p-tea').innerHTML=st.teachers.length?st.teachers.map(t=>`<option value="${t.id}">${esc(t.name)}</option>`).join(''):'<option value="">— কোনো শিক্ষক নেই —</option>';
-
-  /* home */
-  const fp=sum(st.fees,'p'),fdue=sum(st.fees,'d'),tp=sum(st.pays,'p'),td=sum(st.pays,'d');
-  const mp=st.fees.filter(f=>f.kind==='p'&&f.m===now.getMonth()&&f.y===now.getFullYear()).reduce((s,f)=>s+f.a,0);
-  $('#cards').innerHTML=`
-   <div class="card stat big"><small>সর্বমোট আদায়কৃত টাকা (ছাত্র-ছাত্রী)</small><b>${money(fp)}</b></div>
-   <div class="card stat r"><small>মোট বকেয়া (ছাত্র-ছাত্রী)</small><b>${money(fdue)}</b></div>
-   <div class="card stat g"><small>এই মাসে আদায়</small><b>${money(mp)}</b></div>
-   <div class="card stat y"><small>শিক্ষকদের বেতন প্রদান</small><b>${money(tp)}</b></div>
-   <div class="card stat r"><small>শিক্ষকদের বেতন বকেয়া</small><b>${money(td)}</b></div>
-   <div class="card stat y" style="grid-column:1/-1"><small>অন্যান্য খরচ (বিদ্যুৎ, ভাড়া ইত্যাদি)</small><b>${money(exs(st.expenses))}</b></div>
-   <div class="card stat big"><small>নিট জমা (আদায় − শিক্ষক বেতন প্রদান − খরচ)</small><b>${money(fp-tp-exs(st.expenses))}</b></div>`;
-  let rows='',ts=0,tpd=0,tdd=0;
-  CL.forEach((c,i)=>{
-    const ids=st.students.filter(s=>s.cls===i).map(s=>s.id),fl=st.fees.filter(f=>fcl(f)===i);
-    const p=sum(fl,'p'),d=sum(fl,'d');const act=st.students.filter(s=>s.cls===i&&!s.off).length;ts+=act;tpd+=p;tdd+=d;
-    rows+=`<tr><td>${c}</td><td>${bn(act)}</td><td>${money(p)}</td><td>${money(d)}</td></tr>`});
-  $('#ctable').innerHTML=`<thead><tr><th>শ্রেণি</th><th>শিক্ষার্থী</th><th>আদায়</th><th>বকেয়া</th></tr></thead><tbody>${rows}</tbody><tfoot><tr><td>সর্বমোট</td><td>${bn(ts)}</td><td>${money(tpd)}</td><td>${money(tdd)}</td></tr></tfoot>`;
-
-  /* students */
-  const c=$('#sf-cls').value,q=$('#sf-q').value.trim().toLowerCase();
-  const sl=st.students.filter(s=>(c===''||s.cls===+c)&&s.name.toLowerCase().includes(q)&&($('#sf-st').value===''||($('#sf-st').value==='i')===!!s.off)).sort((a,b)=>a.cls-b.cls||(+a.roll||0)-(+b.roll||0));
-  $('#slist').innerHTML=sl.length?sl.map(s=>{const f=st.fees.filter(x=>x.sid===s.id);
-    return `<div class="row"><div class="rm"><b>${esc(s.name)}${s.off?' <span class="badge d">❄️ ফ্রিজ</span>':''}</b><small>${s.off&&s.offDt?'ফ্রিজ: '+fd(s.offDt)+' · ':''}${CL[s.cls]}${s.roll?' · রোল '+esc(s.roll):''}${s.ph?' · '+esc(s.ph):''}<br>আদায় ${money(sum(f,'p'))} · বকেয়া ${money(sum(f,'d'))}</small></div>
-    <div class="ra"><button class="mini" data-act="edit:students:${s.id}">✏️ সম্পাদনা</button><button class="mini" data-act="off:students:${s.id}">${s.off?'🔥 আনফ্রিজ':'❄️ ফ্রিজ'}</button><button class="mini" data-act="qf:students:${s.id}">💰 ফি যোগ</button></div></div>`}).join(''):'<div class="empty">কোনো শিক্ষার্থী নেই</div>';
-
-  /* fees */
-  const fc=$('#fl-cls').value,fk=$('#fl-kind').value,fm=$('#fl-m').value;
-  const fl=st.fees.filter(f=>{const s=S(f.sid);return s&&(fc===''||fcl(f)===+fc)&&(!fk||f.kind===fk)&&(fm===''||f.m===+fm)}).sort(byDt);
-  $('#ftotal').innerHTML=totals(fl,'আদায়');
-  $('#flist').innerHTML=fl.length?fl.map(f=>{const s=S(f.sid);return entryRow(f,'fees',esc(s.name),CL[fcl(f)],['আদায়','আদায় হয়েছে'])}).join(''):'<div class="empty">কোনো লেনদেন নেই</div>';
-
-  /* teachers */
-  $('#tlist').innerHTML=st.teachers.map(t=>{const l=st.pays.filter(p=>p.tid===t.id);
-    return `<div class="row"><div class="rm"><b>${esc(t.name)}</b><small>${esc(t.des)}${t.sal?' · নির্ধারিত '+money(t.sal):''}<br>প্রদান ${money(sum(l,'p'))} · বকেয়া ${money(sum(l,'d'))}</small></div><div class="ra"><button class="mini x" data-act="del:teachers:${t.id}">মুছুন</button></div></div>`}).join('');
-  const pk=$('#pl-kind').value,pl=st.pays.filter(p=>T(p.tid)&&(!pk||p.kind===pk)).sort(byDt);
-  $('#ptotal').innerHTML=totals(pl,'প্রদান');
-  $('#plist').innerHTML=pl.length?pl.map(p=>entryRow(p,'pays',esc(T(p.tid).name),esc(T(p.tid).des||'শিক্ষক'),['প্রদান','প্রদান করুন'])).join(''):'<div class="empty">কোনো বেতন এন্ট্রি নেই</div>';
+/* ---------- animation loop ---------- */
+const D=Math.PI/180; const tl={cur:.08};
+const GV={right:[1,0,0],left:[-1,0,0],front:[0,0,1],back:[0,0,-1],top:[0,-1,0],bottom:[0,1,0]};
+let last=performance.now(),t0=last,fr=0;
+function updateGizmo(rx,ry){
+  const cb=Math.cos(ry*D),sb=Math.sin(ry*D),ca=Math.cos(rx*D),sa=Math.sin(rx*D);
+  const items=ORDER.map(id=>{
+    const [x,y,z]=GV[id]; const x1=x*cb+z*sb, z1=-x*sb+z*cb; const y2=y*ca-z1*sa, z2=y*sa+z1*ca;
+    return {id,px:46+x1*30,py:46+y2*30,z:z2};
+  }).sort((a,b)=>a.z-b.z);
+  items.forEach(it=>{
+    const o=gz[it.id]; o.l.setAttribute('x2',it.px);o.l.setAttribute('y2',it.py);
+    o.c.setAttribute('cx',it.px);o.c.setAttribute('cy',it.py);o.c.setAttribute('r',8+it.z*2.2);
+    o.t.setAttribute('x',it.px);o.t.setAttribute('y',it.py);
+    o.g.style.opacity=.4+.6*(it.z+1)/2; giz.appendChild(o.g);
+  });
 }
-render();
+function loop(now){
+  const dt=Math.min(.05,(now-last)/1000); last=now; const t=(now-t0)/1000; fr++;
+  const a=1-Math.exp(-dt*5.2);
+  cur.rx+=(tgt.rx-cur.rx)*a; cur.ry+=(tgt.ry-cur.ry)*a; cur.k+=(tgt.k-cur.k)*(1-Math.exp(-dt*4.6));
+  let rx=cur.rx,ry=cur.ry;
+  if(mode==='over'&&!dragging){ rx+=Math.sin(t*.7)*2.2-(pm.y-.5)*9; ry+=Math.sin(t*.5)*3.5+(pm.x-.5)*13; }
+  else if(mode==='face'){ rx-=(pm.y-.5)*.4; ry+=(pm.x-.5)*.4; }
+  const Z=P*(1-1/cur.k)-S/2;
+  cube.style.transform=`translateZ(${Z}px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+  if(mode==='over') updateGizmo(rx,ry);
+  if(fr%6===0){ $('#rx').textContent=rx.toFixed(1)+'°'; $('#rz').textContent=(((ry%360)+360)%360).toFixed(1)+'°'; }
+  // tour + timeline
+  if(touring&&now>nextTour){ step(1); nextTour=now+5600; }
+  const base=(idx()+.5)/6;
+  const goal=touring? (idx()+clamp(1-(nextTour-now)/5600,0,1))/6 : base;
+  tl.cur+=(goal-tl.cur)*(1-Math.exp(-dt*(touring?20:6)));
+  $('#tlph').style.left=(tl.cur*100)+'%'; $('#tlf').textContent=Math.round(tl.cur*249)+1;
+  requestAnimationFrame(loop);
+}
 
-/* backup */
-$('#bk-show').onclick=()=>{$('#bk').value=JSON.stringify(st);$('#bk').select();$('#bk-msg').textContent='উপরের লেখাটি কপি করে নিরাপদ জায়গায় রাখুন।'};
-$('#bk-load').onclick=()=>{try{const d=JSON.parse($('#bk').value);if(!d||!Array.isArray(d.students))throw 0;st=Object.assign({name:'',students:[],fees:[],teachers:[],pays:[],expenses:[]},d);$('#sname').value=st.name;save();render();$('#bk-msg').textContent='ফিরিয়ে আনা হয়েছে ✅'}catch(e){$('#bk-msg').textContent='ব্যাকআপটি সঠিক নয়।'}};
-$('#bk-copy').onclick=async()=>{const t=$('#bk').value||JSON.stringify(st);$('#bk').value=t;try{await navigator.clipboard.writeText(t);$('#bk-msg').textContent='✅ কপি হয়েছে'}catch(e){$('#bk').select();let ok=false;try{ok=document.execCommand('copy')}catch(x){}$('#bk-msg').textContent=ok?'✅ কপি হয়েছে':'লেখাটি চেপে ধরে "সব সিলেক্ট" করে কপি করুন'}};
-/* cloud sync */
-const setSync=t=>{$('#sync').textContent=t};
-setSync('📱 শুধু এই ফোনে জমা হচ্ছে');
-(async()=>{try{
-  if(!window.claude||!window.claude.use)return;
-  const db=await window.claude.use('db');if(!db)return;
-  const local0=JSON.parse(JSON.stringify(st)),first=new Set();
-  dbh=db;
-  COLS.forEach(c=>db.collection(c).onSnapshot(s=>{
-    st[c]=s.docs.map(d=>Object.assign({},d.data(),{id:d.id}));
-    const m={};st[c].forEach(x=>m[x.id]=JSON.stringify(x));synced[c]=m;
-    if(!ready){first.add(c);if(first.size===COLS.length){ready=true;
-      if(COLS.every(k=>!st[k].length)&&COLS.some(k=>local0[k]&&local0[k].length)){COLS.forEach(k=>st[k]=local0[k]||[]);if(local0.name)st.name=local0.name}
-      setSync('☁️ সিঙ্ক চালু — সব ফোনে একই হিসাব');save()}}
-    else{try{localStorage.setItem(KEY,JSON.stringify(st))}catch(e){}}
-    render()},()=>{}));
-  db.doc('meta/main').onSnapshot(s=>{if(s.exists){const n=s.data().name||'';sname=n;if(document.activeElement!==$('#sname')){st.name=n;$('#sname').value=n;document.title=(n||'মাদ্রাসা')+' – হিসাব'}}},()=>{});
-}catch(e){}})();
+/* ---------- boot ---------- */
+new ResizeObserver(measure).observe(vp);
+measure(); setUI();
+renderAnim(); renderVfx(); renderAi(false); runConsole();
+requestAnimationFrame(()=>{document.body.classList.add('ready');});
+setInterval(()=>{
+  if(mode!=='face'||performance.now()<pauseUntil||lb.classList.contains('on')) return;
+  if(active==='right') select('anim',sel.anim+1);
+  else if(active==='back') select('vfx',sel.vfx+1);
+  else if(active==='left') select('ai',sel.ai+1);
+},3800);
+requestAnimationFrame(loop);
+})();
 </script>
 </body>
 </html>
